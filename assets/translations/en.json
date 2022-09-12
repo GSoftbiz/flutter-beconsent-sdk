@@ -1,0 +1,14 @@
+{
+	"common": {
+		"loading": "Loading..."
+	},
+	"login": {
+		"phone_number_title": "Phone Number",
+		"phone_number_hint": "Please enter your phone number",
+		"login_button_title": "Login | Register",
+		"or_title": "-or-"
+	},
+	"title": {
+		"profile": "Profile"
+	}
+}

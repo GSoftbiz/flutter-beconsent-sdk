@@ -1,0 +1,14 @@
+{
+	"common": {
+		"loading": "กำลังโหลด..."
+	},
+	"login": {
+		"phone_number_title": "หมายเลขโทรศัพท์",
+		"phone_number_hint": "กรุณากรอกหมายเลขโทรศัพท์",
+		"login_button_title": "เข้าสู่ระบบ | สมัครใช้งาน",
+		"or_title": "-หรือ-"
+	},
+	"title": {
+		"profile": "โปรไฟล์"
+	}
+}

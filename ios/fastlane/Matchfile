@@ -1,0 +1,6 @@
+git_url "git@github.com:.git"
+
+type "appstore" # The default type, can be: appstore, adhoc or development
+
+app_identifier ['com.ios.dev', 'com.ios']
+force false

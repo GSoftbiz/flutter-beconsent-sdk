@@ -1,0 +1,38 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do    
+    desc "Match code signing type:(appstore/adhoc/development) force:(true/false), force=true for adding new device"
+    lane :fetch_provisioning_profiles do |params|
+        force = (params[:force] == true) ? true : false
+
+	    api_key = app_store_connect_api_key(
+        key_id: "9362Z9K77H",
+        issuer_id: "d11b3107-41f7-4298-a547-8ee86531e935",
+        key_content: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR1RBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEJIa3dkd0lCQVFRZ0lyZ2QzSnlqWGZ0WGZkT2sKZ01lV0RXaGNGc0w5LzlYdSt5WExTMHlHa1dtZ0NnWUlLb1pJemowREFRZWhSQU5DQUFULzRLY2krcU0ySjdMdwpBa2g1SVdTbldZSThVYlJmbFFMZGsrNG9Na2RPRElwL1BJVmZIWmFGUks0VmQwcEFXMFpweklyL3FHeW5qNzlZCjZkZndjSHRpCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=",
+		    is_key_content_base64: true,
+            duration: 1200,
+            in_house: false
+      	)
+        
+        match(api_key: api_key, type: params[:type], force: force, generate_apple_certs: false)
+    end
+    
+    lane :build do |params|
+        gym(scheme: params[:scheme], export_method: 'ad-hoc')
+    end
+end
