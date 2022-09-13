@@ -1,10 +1,12 @@
+import 'package:flutter_beconsent_sdk/core/localization/LanguageService.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/ConsentDetail.dart';
 import 'package:flutter_beconsent_sdk/theme/app_dimension.dart';
+import 'package:flutter_beconsent_sdk/theme/app_theme.dart';
+import 'package:flutter_beconsent_sdk/utils/custom_views/f_button.dart';
 import 'package:flutter_beconsent_sdk/utils/helper/alert_dialog_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
@@ -18,14 +20,19 @@ class ConsentScreen extends StatefulWidget {
 }
 
 class _ConsentScreenState extends State<ConsentScreen> {
+  late BuildContext _context;
   SimpleFontelicoProgressDialog? _dialog;
   ConsentDetail? _consentDetail;
-
-  @override
-  void initState() {}
+  bool _allChecked = true;
+  String? _locale;
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
+    if (_locale == null) {
+      _locale = Localizations.localeOf(context).languageCode;
+      LanguageService.language = _locale!;
+    }
     _dialog ??= SimpleFontelicoProgressDialog(
         context: context, barrierDimisable: false);
     if (_consentDetail == null) {
@@ -59,25 +66,71 @@ class _ConsentScreenState extends State<ConsentScreen> {
       },
       child: (_consentDetail == null)
           ? const SizedBox()
-          : Container(
-
-              child: Scaffold(
-                body: SafeArea(
-                    child: CustomScrollView(
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Padding(
-                          child: _content(),
-                          padding: const EdgeInsets.only(
-                              left: AppDimension.spaceL,
-                              right: AppDimension.spaceL,
-                              top: AppDimension.spaceM,
-                              bottom: AppDimension.spaceM)),
+          : Scaffold(
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                          top: AppDimension.spaceM,
+                          left: AppDimension.spaceL,
+                          right: AppDimension.spaceM),
+                      child: Icon(Icons.cancel),
                     ),
-                  ],
-                )),
-              ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Flexible(
+                      flex: 1,
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Padding(
+                                child: _content(),
+                                padding: const EdgeInsets.only(
+                                    left: AppDimension.spaceL,
+                                    right: AppDimension.spaceL,
+                                    top: AppDimension.spaceL,
+                                    bottom: AppDimension.spaceL)),
+                          ),
+                        ],
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: AppDimension.spaceL,
+                        right: AppDimension.spaceL,
+                        top: AppDimension.spaceM,
+                        bottom: AppDimension.spaceM),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: FButton(
+                              title: LanguageService.decline_additions ?? "",
+                              roundRadius: 30,
+                              onPressed: () {},
+                            )),
+                        const SizedBox(
+                          width: AppDimension.spaceL,
+                        ),
+                        Expanded(
+                            flex: 1,
+                            child: FButton(
+                              title: LanguageService.save_settings ?? "",
+                              roundRadius: 30,
+                              onPressed: () {},
+                            ))
+                      ],
+                    ),
+                  )
+                ],
+              )),
             ),
     );
   }
@@ -85,13 +138,101 @@ class _ConsentScreenState extends State<ConsentScreen> {
   //Image.asset(const AssetImage("assets/images/logo.png").assetName, package: 'flutter_beconsent_sdk',)
   _content() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        TextButton(
-            onPressed: () {
-              BlocProvider.of<ConsentBloc>(context)
-                  .add(ConsentEventGetConsentDetail());
-            },
-            child: Text("Hello"))
+        Text(
+          _consentDetail!.getTitle(_context),
+          style: AppTheme.themeData.textTheme.headline5,
+        ),
+        const SizedBox(
+          height: AppDimension.spaceS,
+        ),
+        Text(_consentDetail!.getDesc(_context)),
+        const SizedBox(
+          height: AppDimension.spaceM,
+        ),
+        _line(),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+                flex: 1,
+                child: Text(
+                  LanguageService.accept_all ?? "",
+                  style: AppTheme.themeData.textTheme.headline5,
+                )),
+            Switch(
+                value: _allChecked,
+                onChanged: (checked) {
+                  setState(() {
+                    _allChecked = checked;
+                  });
+                })
+          ],
+        ),
+        _line(),
+        Column(
+          children: _purposeWidgets(),
+        )
+      ],
+    );
+  }
+
+  _line() {
+    return Container(
+      width: double.infinity,
+      height: 1,
+      color: AppTheme.colorTextFieldBorder,
+    );
+  }
+
+  List<Widget> _purposeWidgets() {
+    List<Widget> items = <Widget>[];
+    for (var element in _consentDetail!.purposes) {
+      items.add(const SizedBox(
+        height: AppDimension.spaceM,
+      ));
+      items.add(_purposeWidget(element));
+      items.add(const SizedBox(
+        height: AppDimension.spaceM,
+      ));
+      items.add(_line());
+    }
+
+    return items;
+  }
+
+  Widget _purposeWidget(Purposes purposes) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  purposes.getTitle(context),
+                  style: AppTheme.themeData.textTheme.headline5,
+                ),
+                const SizedBox(
+                  height: AppDimension.spaceS,
+                ),
+                Text(
+                  purposes.getDesc(context),
+                )
+              ],
+            )),
+        Switch(
+            value: _allChecked,
+            onChanged: (checked) {
+              setState(() {
+                _allChecked = checked;
+              });
+            })
       ],
     );
   }

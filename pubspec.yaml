@@ -98,10 +98,6 @@ flutter:
     - google_fonts/
     - assets/translations/
     - assets/common/
-    - assets/login/
-    - assets/splash/
-    - assets/tabbar/
-    - assets/icon/
     - assets/images/
 
   fonts:

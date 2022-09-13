@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 class ConsentDetail {
   ConsentDetail({
     required this.id,
@@ -55,6 +57,30 @@ class ConsentDetail {
   late final List<Purposes> purposes;
   late final String consentUUID;
   late final String workspaceUUID;
+
+  String getTitle(BuildContext context){
+    if(Localizations.localeOf(context).languageCode == "th"){
+       if(title.th.isNotEmpty){
+         return title.th;
+       }
+    }
+    if(title.en.isEmpty){
+      return title.th;
+    }
+    return title.en;
+  }
+
+  String getDesc(BuildContext context){
+    if(Localizations.localeOf(context).languageCode == "th"){
+      if(description.th.isNotEmpty){
+        return description.th;
+      }
+    }
+    if(description.en.isEmpty){
+      return description.th;
+    }
+    return description.en;
+  }
 
   ConsentDetail.fromJson(Map<String, dynamic> json){
     id = json['id'];
@@ -434,6 +460,29 @@ class Purposes {
   late final int workspaceId;
   late final int purposeId;
   late final int order;
+  String getTitle(BuildContext context){
+    if(Localizations.localeOf(context).languageCode == "th"){
+      if(title.th.isNotEmpty){
+        return title.th;
+      }
+    }
+    if(title.en.isEmpty){
+      return title.th;
+    }
+    return title.en;
+  }
+
+  String getDesc(BuildContext context){
+    if(Localizations.localeOf(context).languageCode == "th"){
+      if(description.th.isNotEmpty){
+        return description.th;
+      }
+    }
+    if(description.en.isEmpty){
+      return description.th;
+    }
+    return description.en;
+  }
 
   Purposes.fromJson(Map<String, dynamic> json){
     id = json['id'];
