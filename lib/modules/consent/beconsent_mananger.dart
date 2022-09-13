@@ -33,8 +33,6 @@ class Middle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-
-      
       width: MediaQuery.of(context).size.width,
       child: BlocProvider<ConsentBloc>(
         create: (context) =>

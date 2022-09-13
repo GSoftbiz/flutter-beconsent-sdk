@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
+import '../../../core/localization/device_locale.dart';
+
 class ConsentScreen extends StatefulWidget {
   static const String route = '/consent';
 
@@ -32,6 +34,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
     if (_locale == null) {
       _locale = Localizations.localeOf(context).languageCode;
       LanguageService.language = _locale!;
+      debugPrint("_locale_ : $_locale");
     }
     _dialog ??= SimpleFontelicoProgressDialog(
         context: context, barrierDimisable: false);
@@ -235,5 +238,10 @@ class _ConsentScreenState extends State<ConsentScreen> {
             })
       ],
     );
+  }
+
+  Future<void> getLocale() async {
+    var locale = await DeviceLocale.currentAsLocale;
+
   }
 }
