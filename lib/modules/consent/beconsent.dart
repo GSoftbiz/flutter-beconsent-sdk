@@ -3,7 +3,6 @@
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_beconsent_sdk/core/localization/device_locale.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../core/secure_storage/impl/secure_storage.dart';
@@ -24,9 +23,6 @@ class BeConsent {
     BeConsent.workSpaceID = workSpaceID;
     BeConsent.consentAppID = consentAppID;
     BeConsent.DSRMFormID = DSRMFormID;
-    //EasyLoading.init();
-    //String? locale = await DeviceLocale.currentLocale;
-    //debugPrint("_locale : $locale");
     await EasyLocalization.ensureInitialized();
     WidgetsFlutterBinding.ensureInitialized();
     final storage = SecureStorageImpl('beconsent');

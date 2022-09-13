@@ -1,4 +1,4 @@
-import 'package:flutter_beconsent_sdk/core/localization/LanguageService.dart';
+import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/ConsentDetail.dart';
 import 'package:flutter_beconsent_sdk/theme/app_dimension.dart';
@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
-
-import '../../../core/localization/device_locale.dart';
 
 class ConsentScreen extends StatefulWidget {
   static const String route = '/consent';
@@ -26,6 +24,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
   SimpleFontelicoProgressDialog? _dialog;
   ConsentDetail? _consentDetail;
   bool _allChecked = true;
+  Map<int, bool> _purposeChecked = {};
   String? _locale;
 
   @override
@@ -34,7 +33,6 @@ class _ConsentScreenState extends State<ConsentScreen> {
     if (_locale == null) {
       _locale = Localizations.localeOf(context).languageCode;
       LanguageService.language = _locale!;
-      debugPrint("_locale_ : $_locale");
     }
     _dialog ??= SimpleFontelicoProgressDialog(
         context: context, barrierDimisable: false);
@@ -55,6 +53,9 @@ class _ConsentScreenState extends State<ConsentScreen> {
             if (state.event is ConsentEventGetConsentDetail) {
               setState(() {
                 _consentDetail = state.consentDetail;
+                _consentDetail?.purposes?.forEach((element) {
+                  _purposeChecked[element.id] = true;
+                });
               });
             }
             break;
@@ -170,6 +171,11 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 onChanged: (checked) {
                   setState(() {
                     _allChecked = checked;
+                    _consentDetail?.purposes?.forEach((element) {
+                      if (!element.primary) {
+                        _purposeChecked[element.id] = _allChecked;
+                      }
+                    });
                   });
                 })
           ],
@@ -230,18 +236,26 @@ class _ConsentScreenState extends State<ConsentScreen> {
               ],
             )),
         Switch(
-            value: _allChecked,
-            onChanged: (checked) {
-              setState(() {
-                _allChecked = checked;
-              });
-            })
+            value: _purposeChecked[purposes.id] ?? false,
+            onChanged: (purposes.primary)
+                ? null
+                : (checked) {
+                    setState(() {
+                      _purposeChecked[purposes.id] = checked;
+                      updateAllChecked();
+                    });
+                  })
       ],
     );
   }
 
-  Future<void> getLocale() async {
-    var locale = await DeviceLocale.currentAsLocale;
-
+  void updateAllChecked() {
+    _allChecked = true;
+    _consentDetail?.purposes?.forEach((element) {
+      if (_purposeChecked[element.id] == false) {
+        _allChecked = false;
+        return;
+      }
+    });
   }
 }
