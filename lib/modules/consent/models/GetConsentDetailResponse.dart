@@ -416,14 +416,14 @@ class Purposes {
     required this.dataSubjectGroup,
     required this.isConsentPurpose,
     required this.lawfulBases,
-    this.lawfulBasisDescription,
+    //this.lawfulBasisDescription,
     required this.isInternalApplication,
-    this.internalApplication,
+    //this.internalApplication,
     required this.thirdPartyDisclosure,
-    this.thirdPartyName,
+    //this.thirdPartyName,
     required this.thirdPartyCountry,
-    this.thirdPartyContract,
-    this.dataRetentionDescription,
+    //this.thirdPartyContract,
+    //this.dataRetentionDescription,
     required this.storage,
     required this.securityMeasure,
     required this.version,
@@ -445,14 +445,14 @@ class Purposes {
   late final String dataSubjectGroup;
   late final bool isConsentPurpose;
   late final List<dynamic> lawfulBases;
-  late final Null lawfulBasisDescription;
+  //late final Null lawfulBasisDescription;
   late final bool isInternalApplication;
-  late final Null internalApplication;
+  //late final Null internalApplication;
   late final bool thirdPartyDisclosure;
-  late final Null thirdPartyName;
+  //late final Null thirdPartyName;
   late final String thirdPartyCountry;
-  late final Null thirdPartyContract;
-  late final Null dataRetentionDescription;
+  //late final Null thirdPartyContract;
+  //late final Null dataRetentionDescription;
   late final String storage;
   late final String securityMeasure;
   late final String version;
@@ -487,32 +487,32 @@ class Purposes {
   Purposes.fromJson(Map<String, dynamic> json){
     id = json['id'];
     uuid = json['uuid'];
-    purposeCategories = List.from(json['purposeCategories']).map((e)=>PurposeCategories.fromJson(e)).toList();
-    piiCategories = List.from(json['piiCategories']).map((e)=>PiiCategories.fromJson(e)).toList();
-    personnel = Personnel.fromJson(json['personnel']);
+    //purposeCategories = List.from(json['purposeCategories']).map((e)=>PurposeCategories.fromJson(e)).toList();
+    //piiCategories = List.from(json['piiCategories']).map((e)=>PiiCategories.fromJson(e)).toList();
+    //personnel = Personnel.fromJson(json['personnel']);
     title = Title.fromJson(json['title']);
     description = Description.fromJson(json['description']);
-    availableLanguage = List.castFrom<dynamic, String>(json['availableLanguage']);
-    defaultLanguage = json['defaultLanguage'];
+    //availableLanguage = List.castFrom<dynamic, String>(json['availableLanguage']);
+    //defaultLanguage = json['defaultLanguage'];
     primary = json['primary'];
-    dataSubjectGroup = json['dataSubjectGroup'];
-    isConsentPurpose = json['isConsentPurpose'];
-    lawfulBases = List.castFrom<dynamic, dynamic>(json['lawfulBases']);
-    lawfulBasisDescription = null;
-    isInternalApplication = json['isInternalApplication'];
-    internalApplication = null;
-    thirdPartyDisclosure = json['thirdPartyDisclosure'];
-    thirdPartyName = null;
-    thirdPartyCountry = json['thirdPartyCountry'];
-    thirdPartyContract = null;
-    dataRetentionDescription = null;
-    storage = json['storage'];
-    securityMeasure = json['securityMeasure'];
+    //dataSubjectGroup = json['dataSubjectGroup'];
+    //isConsentPurpose = json['isConsentPurpose'];
+    //lawfulBases = List.castFrom<dynamic, dynamic>(json['lawfulBases']);
+    //lawfulBasisDescription = null;
+    //isInternalApplication = json['isInternalApplication'];
+    //internalApplication = null;
+    //thirdPartyDisclosure = json['thirdPartyDisclosure'];
+    //thirdPartyName = null;
+    //thirdPartyCountry = json['thirdPartyCountry'];
+    //thirdPartyContract = null;
+    //dataRetentionDescription = null;
+    //storage = json['storage'];
+    //securityMeasure = json['securityMeasure'];
     version = json['version'];
-    publishedAt = json['publishedAt'];
+    //publishedAt = json['publishedAt'];
     workspaceId = json['workspaceId'];
-    purposeId = json['purposeId'];
-    order = json['order'];
+    //purposeId = json['purposeId'];
+    //order = json['order'];
   }
 
   Map<String, dynamic> toJson() {
@@ -530,14 +530,14 @@ class Purposes {
     _data['dataSubjectGroup'] = dataSubjectGroup;
     _data['isConsentPurpose'] = isConsentPurpose;
     _data['lawfulBases'] = lawfulBases;
-    _data['lawfulBasisDescription'] = lawfulBasisDescription;
+    //_data['lawfulBasisDescription'] = lawfulBasisDescription;
     _data['isInternalApplication'] = isInternalApplication;
-    _data['internalApplication'] = internalApplication;
+    //_data['internalApplication'] = internalApplication;
     _data['thirdPartyDisclosure'] = thirdPartyDisclosure;
-    _data['thirdPartyName'] = thirdPartyName;
+    //_data['thirdPartyName'] = thirdPartyName;
     _data['thirdPartyCountry'] = thirdPartyCountry;
-    _data['thirdPartyContract'] = thirdPartyContract;
-    _data['dataRetentionDescription'] = dataRetentionDescription;
+    //_data['thirdPartyContract'] = thirdPartyContract;
+    //_data['dataRetentionDescription'] = dataRetentionDescription;
     _data['storage'] = storage;
     _data['securityMeasure'] = securityMeasure;
     _data['version'] = version;

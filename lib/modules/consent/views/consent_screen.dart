@@ -35,7 +35,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
       LanguageService.language = _locale!;
     }
     _dialog ??= SimpleFontelicoProgressDialog(
-        context: context, barrierDimisable: false);
+        context: context, barrierDimisable: true);
     if (_consentDetail == null) {
       BlocProvider.of<ConsentBloc>(context).add(ConsentEventGetConsentDetail());
     }
@@ -44,31 +44,48 @@ class _ConsentScreenState extends State<ConsentScreen> {
       listener: (context, state) {
         switch (state.status) {
           case FormzStatus.submissionInProgress:
-            _dialog?.show(
-                message: 'Loading...',
-                type: SimpleFontelicoProgressDialogType.normal);
+            if (state.event is! ConsentEventGetMyConsent) {
+              _dialog?.show(
+                  message: 'Loading...',
+                  type: SimpleFontelicoProgressDialogType.normal);
+            }
+
             break;
           case FormzStatus.submissionSuccess:
             _dialog?.hide();
             if (state.event is ConsentEventGetConsentDetail) {
+              BlocProvider.of<ConsentBloc>(context).add(ConsentEventGetMyConsent());
+            }
+
+            if (state.event is ConsentEventSubmitConsent) {
+              Navigator.pop(context);
+            }
+            if (state.event is ConsentEventGetMyConsent) {
+              setState(() {
+                _consentDetail = state.consentDetail;
+                _consentDetail?.purposes?.forEach((element) {
+                  _purposeChecked[element.id] = false;
+                });
+                state.consented?.purposes?.forEach((element) {
+                  _purposeChecked[element.id] = true;
+                });
+                updateAllChecked();
+              });
+            }
+            break;
+          case FormzStatus.submissionFailure:
+            _dialog?.hide();
+            if (state.event is ConsentEventGetMyConsent) {
               setState(() {
                 _consentDetail = state.consentDetail;
                 _consentDetail?.purposes?.forEach((element) {
                   _purposeChecked[element.id] = true;
                 });
               });
-              BlocProvider.of<ConsentBloc>(context).add(ConsentEventGetMyConsent());
+            }else{
+              showAlertDialog(context, null, state.error?.message);
             }
-            if (state.event is ConsentEventSubmitConsent) {
-              Navigator.pop(context);
-            }
-            if (state.event is ConsentEventGetMyConsent) {
 
-            }
-            break;
-          case FormzStatus.submissionFailure:
-            _dialog?.hide();
-            showAlertDialog(context, null, state.error?.message);
             break;
           default:
             _dialog?.hide();

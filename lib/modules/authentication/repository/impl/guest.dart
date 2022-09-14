@@ -47,7 +47,7 @@ class AuthenticationRepositoryImpl extends Repository
   Future<Either<NetworkError, GetMyConsentResponse>> getMyConsent(GetMyConsentBody body) async {
     try {
       final response = await apiClient.post(
-          '${BeConsent.workSpaceID}/user-consents/consent/${BeConsent.consentDetail?.consentId}/version/${BeConsent.consentDetail?.version}/get-user-consent',
+          '${BeConsent.workSpaceID}/user-consents/consent/${BeConsent.consentDetail?.consentUUID}/version/${BeConsent.consentDetail?.version}/get-user-consent',
           body: body.toJson());
       return Right(GetMyConsentResponse.fromJson(response.data));
     } on NetworkError catch (e) {

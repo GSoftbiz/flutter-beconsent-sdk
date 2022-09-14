@@ -57,18 +57,19 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
     Emitter<ConsentState> emit,
   ) async {
     emit(state.copyWith(
+      event: event,
       status: FormzStatus.submissionInProgress,
     ));
     await _authenticationRepository
         .getMyConsent(GetMyConsentBody(uid: BeConsent.UUID))
         .fold(
             (left) => emit(state.copyWith(
-                status: FormzStatus.submissionFailure, error: left)),
+                status: FormzStatus.submissionFailure, error: left,event: event)),
             (right) => {
                   emit(state.copyWith(
                       status: FormzStatus.submissionSuccess,
                       consented: right,
-                      event: ConsentEventGetMyConsent()))
+                      event: event))
                 });
   }
 

@@ -9,7 +9,7 @@ class GetMyConsentResponse {
 
   late final List<Purposes> purposes;
   late final String action;
-  late final int consentVersion;
+  late final String consentVersion;
 
   bool isNone() {
     return action.contains("NONE");
@@ -20,7 +20,7 @@ class GetMyConsentResponse {
   }
 
   GetMyConsentResponse.fromJson(Map<String, dynamic> json) {
-    //purposes = List.from(json['purposes']).map((e) => Purposes.fromJson(e)).toList();
+    purposes = List.from(json['purposes']).map((e) => Purposes.fromJson(e)).toList();
     action = json['action'];
     consentVersion = json['consentVersion'];
   }
