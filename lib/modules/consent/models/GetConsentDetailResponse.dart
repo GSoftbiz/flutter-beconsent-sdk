@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class ConsentDetail {
-  ConsentDetail({
+class GetConsentDetailResponse {
+  GetConsentDetailResponse({
     required this.id,
     required this.uuid,
     required this.createdAt,
@@ -82,7 +82,7 @@ class ConsentDetail {
     return description.en;
   }
 
-  ConsentDetail.fromJson(Map<String, dynamic> json){
+  GetConsentDetailResponse.fromJson(Map<String, dynamic> json){
     id = json['id'];
     uuid = json['uuid'];
     createdAt = json['createdAt'];

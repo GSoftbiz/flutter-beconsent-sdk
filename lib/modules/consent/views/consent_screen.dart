@@ -1,6 +1,6 @@
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/ConsentDetail.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/GetConsentDetailResponse.dart';
 import 'package:flutter_beconsent_sdk/theme/app_dimension.dart';
 import 'package:flutter_beconsent_sdk/theme/app_theme.dart';
 import 'package:flutter_beconsent_sdk/utils/custom_views/f_button.dart';
@@ -22,7 +22,7 @@ class ConsentScreen extends StatefulWidget {
 class _ConsentScreenState extends State<ConsentScreen> {
   late BuildContext _context;
   SimpleFontelicoProgressDialog? _dialog;
-  ConsentDetail? _consentDetail;
+  GetConsentDetailResponse? _consentDetail;
   bool _allChecked = true;
   Map<int, bool> _purposeChecked = {};
   String? _locale;
@@ -57,6 +57,13 @@ class _ConsentScreenState extends State<ConsentScreen> {
                   _purposeChecked[element.id] = true;
                 });
               });
+              BlocProvider.of<ConsentBloc>(context).add(ConsentEventGetMyConsent());
+            }
+            if (state.event is ConsentEventSubmitConsent) {
+              Navigator.pop(context);
+            }
+            if (state.event is ConsentEventGetMyConsent) {
+
             }
             break;
           case FormzStatus.submissionFailure:
@@ -118,7 +125,22 @@ class _ConsentScreenState extends State<ConsentScreen> {
                             child: FButton(
                               title: LanguageService.decline_additions ?? "",
                               roundRadius: 30,
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  var i = 0;
+                                  _consentDetail?.purposes?.forEach((element) {
+                                    if (!element.primary) {
+                                      _purposeChecked[element.id] = false;
+                                      i++;
+                                    }
+                                  });
+                                  if (_consentDetail?.purposes?.length == i) {
+                                    _allChecked = false;
+                                  }
+                                });
+                                BlocProvider.of<ConsentBloc>(context).add(
+                                    ConsentEventSubmitConsent(_purposeChecked));
+                              },
                             )),
                         const SizedBox(
                           width: AppDimension.spaceL,
@@ -128,7 +150,10 @@ class _ConsentScreenState extends State<ConsentScreen> {
                             child: FButton(
                               title: LanguageService.save_settings ?? "",
                               roundRadius: 30,
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<ConsentBloc>(context).add(
+                                    ConsentEventSubmitConsent(_purposeChecked));
+                              },
                             ))
                       ],
                     ),

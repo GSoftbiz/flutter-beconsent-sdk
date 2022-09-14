@@ -2,28 +2,35 @@ part of 'consent_bloc.dart';
 
 class ConsentState extends Equatable {
   final FormzStatus status;
-  final ConsentDetail? consentDetail;
+  final GetConsentDetailResponse? consentDetail;
+  final SubmitConsentResponse? consentSubmitted;
+  final GetMyConsentResponse? consented;
   final NetworkError? error;
   final ConsentEvent? event;
 
-  const ConsentState({
-    this.status = FormzStatus.pure,
-    this.consentDetail,
-    this.error,
-    this.event
-  });
+  const ConsentState(
+      {this.status = FormzStatus.pure,
+      this.consentDetail,
+      this.error,
+      this.consentSubmitted,
+      this.consented,
+      this.event});
 
   ConsentState copyWith({
     FormzStatus? status,
-    ConsentDetail? consentDetail,
+    GetConsentDetailResponse? consentDetail,
+    SubmitConsentResponse? consentSubmitted,
+    GetMyConsentResponse? consented,
     NetworkError? error,
     ConsentEvent? event,
   }) {
     return ConsentState(
         status: status ?? this.status,
-        consentDetail: consentDetail,
+        consentDetail: consentDetail ?? this.consentDetail,
+        consentSubmitted: consentSubmitted ?? this.consentSubmitted,
+        consented: consented?? this.consented,
         error: error,
-        event:event);
+        event: event);
   }
 
   @override

@@ -30,6 +30,6 @@ class NetworkAuthenticationImpl extends NetworkAuthentication {
                 });
 
      */
-    return true;
+    return false;
   }
 }

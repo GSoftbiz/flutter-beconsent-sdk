@@ -29,7 +29,6 @@ class BeConsentManager {
 
 class Middle extends StatelessWidget {
   const Middle({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
