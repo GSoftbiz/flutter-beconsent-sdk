@@ -10,13 +10,16 @@ class AppTheme {
   static const FontWeight semiBold = FontWeight.w600;
   static const FontWeight bold = FontWeight.w700;
 
+  static const colorSlate = Color(0xFF57697B);
+  static const colorFee = Color(0xFF106EBA);
+  static const colorSoftGray = Color(0xFFF6F6F6);
   static const colorTextFieldBorder = Color(0xFFDFE1E6);
   static const colorTextHint = Color(0x99676767);
   static const colorFacebook = Color(0xFF007AFF);
   static const colorBitchRed = Color(0xFFFF3B30);
 
   static const _highlightColor = Color(0x80F15A27);
-  static const _primaryColor = Color(0xFF007AFF);
+  static Color _primaryColor = Color(0xFF007AFF);
   static const _textColor = Color(0xFF000000);
   static final _subtitle1 = const TextStyle(
     fontWeight: medium,
@@ -25,6 +28,9 @@ class AppTheme {
   );
   static const double _tabbarIconSize = 25;
 
+  static setPrimaryColor(Color color){
+    _primaryColor = color;
+  }
   static final TextTheme _textTheme = TextTheme(
     headline1: const TextStyle(
       fontWeight: semiBold,
@@ -42,12 +48,12 @@ class AppTheme {
       fontSize: 22.0,
     ),
     headline4: const TextStyle(
-      fontWeight: medium,
+      fontWeight: bold,
       color: _textColor,
       fontSize: 20.0,
     ),
     headline5: const TextStyle(
-      fontWeight: medium,
+      fontWeight: bold,
       color: _textColor,
       fontSize: 18.0,
     ),
@@ -99,7 +105,7 @@ class AppTheme {
         dividerColor: const Color(0xFFEEEEEE),
         hintColor: const Color(0xFF999999),
         appBarTheme: _appBarTheme,
-        textSelectionTheme: const TextSelectionThemeData(
+        textSelectionTheme:  TextSelectionThemeData(
           cursorColor: _primaryColor,
           selectionColor: _primaryColor,
           selectionHandleColor: _primaryColor,

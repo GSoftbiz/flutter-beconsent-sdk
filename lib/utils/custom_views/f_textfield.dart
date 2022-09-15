@@ -8,8 +8,8 @@ import '../../images/images.dart';
 
 
 class FTextField extends StatelessWidget {
-  final Color _focusedBorderColor = AppTheme.themeData.highlightColor;
-  final Color _borderColor = AppTheme.themeData.primaryColor;
+  final Color _focusedBorderColor = AppTheme.themeData.primaryColor;
+  final Color _borderColor = AppTheme.colorTextFieldBorder;
   final String? title;
   final TextEditingController? controller;
   final TextInputFormatter? textInputFormatter;
@@ -94,7 +94,7 @@ class FTextField extends StatelessWidget {
           ),
           SizedBox(
             child: _textField(context, textInputFormatters),
-            height: multiline ?? false ? 80 : 40,
+            height: multiline ?? false ? 120 : 49,
           ),
         ]);
   }
@@ -103,12 +103,13 @@ class FTextField extends StatelessWidget {
       BuildContext context, List<TextInputFormatter> textInputFormatters) {
     return TextField(
       showCursor: showCursor,
+      style: AppTheme.themeData.textTheme.bodyText2?.copyWith(fontSize: 18),
       readOnly: readOnly ?? false,
       obscureText: obscureText ?? false,
       onChanged: onChanged,
       enabled: enable,
       keyboardType: inputType ?? TextInputType.text,
-      maxLines: multiline ?? false ? 100 : 1,
+      maxLines: multiline ?? false ? 120 : 1,
       inputFormatters: textInputFormatters,
       controller: controller,
       focusNode: focus,
@@ -133,7 +134,7 @@ class FTextField extends StatelessWidget {
               : null,
           hintText: placeholder,
           hintStyle:
-              hintStyle ?? AppTheme.themeData.textTheme.bodyText2,
+              hintStyle ?? AppTheme.themeData.textTheme.bodyText2?.copyWith(color: Colors.grey),
           contentPadding:
               const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           fillColor: enable ?? true
@@ -143,16 +144,16 @@ class FTextField extends StatelessWidget {
           disabledBorder: OutlineInputBorder(
               borderSide:
                   BorderSide(color: borderColor??_borderColor),
-              borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(8)),
           enabledBorder: OutlineInputBorder(
               borderSide:
                   BorderSide(color: borderColor??_borderColor),
-              borderRadius: BorderRadius.circular(12)),
+              borderRadius: BorderRadius.circular(8)),
           focusedBorder: OutlineInputBorder(
               borderSide:
                   BorderSide(color: focusedBorderColor??_focusedBorderColor),
-              borderRadius: BorderRadius.circular(12)),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+              borderRadius: BorderRadius.circular(8)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
     );
   }
 }

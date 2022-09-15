@@ -1,15 +1,13 @@
-
-
 import 'package:either_dart/either.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/core/user_session/user_session.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/beconsent.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/GetMyConsentBody.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/GetMyConsentResponse.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/GetConsentDetailResponse.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/get_my_consent_body.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/get_my_consent_response.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/SubmitConsentBody.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/SubmitConsentResponse.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/submit_consent_body.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/submit_consent_response.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_beconsent_sdk/modules/authentication/repository/guest.dart';
@@ -66,7 +64,9 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
         .getMyConsent(GetMyConsentBody(uid: BeConsent.uuid))
         .fold(
             (left) => emit(state.copyWith(
-                status: FormzStatus.submissionFailure, error: left,event: event)),
+                status: FormzStatus.submissionFailure,
+                error: left,
+                event: event)),
             (right) => {
                   emit(state.copyWith(
                       status: FormzStatus.submissionSuccess,
@@ -91,6 +91,7 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
       }
       i++;
     });
+
     //action
     var action = "ALL";
     if (purposeUUIDs.isEmpty) {
@@ -98,7 +99,9 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
     } else if (purposeUUIDs.length < state.consentDetail!.purposes!.length) {
       action = "PARTIAL";
     }
-    //CHANGE_TO_
+    if (state.consented != null) {
+      action = "CHANGE_TO_$action";
+    }
     await _authenticationRepository
         .submitConsent(SubmitConsentBody(
             uid: BeConsent.uuid,

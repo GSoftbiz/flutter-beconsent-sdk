@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_beconsent_sdk/configs/app_configs.dart';
 import 'package:flutter_beconsent_sdk/di/injector.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/views/consent_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_localization/easy_localization.dart';
 
-class BeConsentManager {
+class ConsentManager {
   Future<void> show(BuildContext context,{bool? forceShow}) async {
     return await showDialog(
         context: context,

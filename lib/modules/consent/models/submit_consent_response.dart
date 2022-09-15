@@ -1,5 +1,5 @@
-import 'package:flutter_beconsent_sdk/modules/consent/models/GetConsentDetailResponse.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/Version.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/version.dart';
 
 class SubmitConsentResponse {
   SubmitConsentResponse({

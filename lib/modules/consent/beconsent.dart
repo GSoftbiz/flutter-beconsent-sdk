@@ -1,9 +1,8 @@
-
-
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/GetConsentDetailResponse.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
+import 'package:flutter_beconsent_sdk/theme/app_theme.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../core/secure_storage/impl/secure_storage.dart';
@@ -23,10 +22,17 @@ class BeConsent {
   static String? name = "";
   static GetConsentDetailResponse? consentDetail;
 
-  static init({String? workSpaceID, String? consentAppID, String? DSRMFormID}) async {
+  static init(
+      {String? workSpaceID,
+      String? consentAppID,
+      String? dsrmFormID,
+      Color? color}) async {
     BeConsent.workSpaceID = workSpaceID;
     BeConsent.consentAppID = consentAppID;
-    BeConsent.dsrmFormID = DSRMFormID;
+    BeConsent.dsrmFormID = dsrmFormID;
+    if (color != null) {
+      AppTheme.setPrimaryColor(color);
+    }
     await EasyLocalization.ensureInitialized();
     WidgetsFlutterBinding.ensureInitialized();
     final storage = SecureStorageImpl('beconsent');

@@ -1,7 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
-import 'package:flutter_beconsent_sdk/modules/consent/models/GetConsentDetailResponse.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
 import 'package:flutter_beconsent_sdk/theme/app_dimension.dart';
 import 'package:flutter_beconsent_sdk/theme/app_theme.dart';
 import 'package:flutter_beconsent_sdk/utils/custom_views/f_button.dart';
