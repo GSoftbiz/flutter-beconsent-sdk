@@ -149,12 +149,13 @@ class _DSRMScreenState extends State<DSRMScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-       Center(child:  Image.asset(const AssetImage("assets/images/logo.png").assetName, package: 'flutter_beconsent_sdk',),),
+
         _block1Title(),
         _block2Identity(),
         _block3Rights(),
         (_rightRequest != null) ? _block4RightOptions() : const SizedBox(),
-        _block5Last()
+        _block5Last(),
+
       ],
     );
   }
@@ -179,6 +180,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Image.asset(const AssetImage("assets/images/logo.png").assetName, package: 'flutter_beconsent_sdk',height: 100,),
             Text(
               LanguageService.get("dsrm_title"),
               style: AppTheme.themeData.textTheme.headline5,
