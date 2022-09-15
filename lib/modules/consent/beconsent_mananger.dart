@@ -8,13 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class BeConsentManager {
-  Future<void> show(BuildContext context) async {
+  Future<void> show(BuildContext context,{bool? forceShow}) async {
     return await showDialog(
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
 
-            return Middle();
+            return Middle(forceShow: forceShow,);
             /*return const AlertDialog(
                 content: Middle(),
                 insetPadding:
@@ -28,7 +28,8 @@ class BeConsentManager {
 }
 
 class Middle extends StatelessWidget {
-  const Middle({Key? key}) : super(key: key);
+  bool? forceShow;
+  Middle({Key? key,this.forceShow}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -39,8 +40,8 @@ class Middle extends StatelessWidget {
                 authenticationRepository:
                 Injector.instance.authenticationRepository,
                 userSession: Injector.instance.userSession),
-        child: const Padding(padding: EdgeInsets.all(0),
-          child: ConsentScreen(),),
+        child: Padding(padding: const EdgeInsets.all(0),
+          child: ConsentScreen(forceShow: forceShow,),),
       ),
     );
 

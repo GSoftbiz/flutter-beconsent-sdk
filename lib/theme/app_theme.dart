@@ -16,7 +16,7 @@ class AppTheme {
   static const colorBitchRed = Color(0xFFFF3B30);
 
   static const _highlightColor = Color(0x80F15A27);
-  static const _primaryColor = Color(0xFFF15A27);
+  static const _primaryColor = Color(0xFF007AFF);
   static const _textColor = Color(0xFF000000);
   static final _subtitle1 = const TextStyle(
     fontWeight: medium,

@@ -28,11 +28,16 @@ class ConsentState extends Equatable {
         status: status ?? this.status,
         consentDetail: consentDetail ?? this.consentDetail,
         consentSubmitted: consentSubmitted ?? this.consentSubmitted,
-        consented: consented?? this.consented,
+        consented: consented ?? this.consented,
         error: error,
         event: event);
   }
 
   @override
   List<Object> get props => [status];
+
+  bool hasNewVersion() {
+    return int.parse(consented?.consentVersion ?? "0") <
+        int.parse(consentDetail?.version ?? "0");
+  }
 }

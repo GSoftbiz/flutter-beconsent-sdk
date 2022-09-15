@@ -1,3 +1,5 @@
+
+
 import 'package:either_dart/either.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/core/user_session/user_session.dart';
@@ -61,7 +63,7 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
       status: FormzStatus.submissionInProgress,
     ));
     await _authenticationRepository
-        .getMyConsent(GetMyConsentBody(uid: BeConsent.UUID))
+        .getMyConsent(GetMyConsentBody(uid: BeConsent.uuid))
         .fold(
             (left) => emit(state.copyWith(
                 status: FormzStatus.submissionFailure, error: left,event: event)),
@@ -99,7 +101,7 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
     //CHANGE_TO_
     await _authenticationRepository
         .submitConsent(SubmitConsentBody(
-            uid: BeConsent.UUID,
+            uid: BeConsent.uuid,
             action: action,
             language: LanguageService.defaultLanguage,
             name: BeConsent.name,

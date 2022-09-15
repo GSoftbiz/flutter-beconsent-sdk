@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/GetConsentDetailResponse.dart';
@@ -12,10 +13,10 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class ConsentScreen extends StatefulWidget {
   static const String route = '/consent';
+  bool? forceShow;
 
-  const ConsentScreen({Key? key}) : super(key: key);
+  ConsentScreen({Key? key, this.forceShow}) : super(key: key);
 
-  @override
   State<ConsentScreen> createState() => _ConsentScreenState();
 }
 
@@ -34,8 +35,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
       _locale = Localizations.localeOf(context).languageCode;
       LanguageService.language = _locale!;
     }
-    _dialog ??= SimpleFontelicoProgressDialog(
-        context: context, barrierDimisable: true);
+    _dialog ??=
+        SimpleFontelicoProgressDialog(context: context, barrierDimisable: true);
     if (_consentDetail == null) {
       BlocProvider.of<ConsentBloc>(context).add(ConsentEventGetConsentDetail());
     }
@@ -54,27 +55,50 @@ class _ConsentScreenState extends State<ConsentScreen> {
           case FormzStatus.submissionSuccess:
             _dialog?.hide();
             if (state.event is ConsentEventGetConsentDetail) {
-              BlocProvider.of<ConsentBloc>(context).add(ConsentEventGetMyConsent());
+              BlocProvider.of<ConsentBloc>(context)
+                  .add(ConsentEventGetMyConsent());
             }
 
             if (state.event is ConsentEventSubmitConsent) {
-              Navigator.pop(context);
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.success,
+                animType: AnimType.bottomSlide,
+                title: LanguageService.success,
+                dismissOnTouchOutside: false,
+                headerAnimationLoop: false,
+                dismissOnBackKeyPress: false,
+                width: 260,
+                autoHide: const Duration(seconds: 2),
+                onDismissCallback: (s){
+                  Navigator.pop(context);
+                },
+                padding: const EdgeInsets.only(bottom: AppDimension.spaceM),
+              ).show();
             }
+
             if (state.event is ConsentEventGetMyConsent) {
-              setState(() {
-                _consentDetail = state.consentDetail;
-                _consentDetail?.purposes?.forEach((element) {
-                  _purposeChecked[element.id] = false;
+              if (state.hasNewVersion() || widget.forceShow == true) {
+                //show my consent
+                setState(() {
+                  _consentDetail = state.consentDetail;
+                  _consentDetail?.purposes?.forEach((element) {
+                    _purposeChecked[element.id] = false;
+                  });
+                  state.consented?.purposes?.forEach((element) {
+                    _purposeChecked[element.id] = true;
+                  });
+                  updateAllChecked();
                 });
-                state.consented?.purposes?.forEach((element) {
-                  _purposeChecked[element.id] = true;
-                });
-                updateAllChecked();
-              });
+              } else {
+                //hide
+                Navigator.pop(context);
+              }
             }
             break;
           case FormzStatus.submissionFailure:
             _dialog?.hide();
+            //show if not found my consent
             if (state.event is ConsentEventGetMyConsent) {
               setState(() {
                 _consentDetail = state.consentDetail;
@@ -82,7 +106,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                   _purposeChecked[element.id] = true;
                 });
               });
-            }else{
+            } else {
               showAlertDialog(context, null, state.error?.message);
             }
 
@@ -210,6 +234,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 )),
             Switch(
                 value: _allChecked,
+                activeColor: AppTheme.themeData.primaryColor,
                 onChanged: (checked) {
                   setState(() {
                     _allChecked = checked;
@@ -279,6 +304,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
             )),
         Switch(
             value: _purposeChecked[purposes.id] ?? false,
+            activeColor: AppTheme.themeData.primaryColor,
             onChanged: (purposes.primary)
                 ? null
                 : (checked) {

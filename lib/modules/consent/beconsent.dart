@@ -18,16 +18,15 @@ class BeConsent {
   static String baseUrl = "https://rst-consent.beconsent.tech/api/v1/";
   static String? workSpaceID = "";
   static String? consentAppID = "";
-  static String? DSRMFormID = "";
-  static String? UUID = "";
+  static String? dsrmFormID = "";
+  static String? uuid = "";
   static String? name = "";
   static GetConsentDetailResponse? consentDetail;
-
 
   static init({String? workSpaceID, String? consentAppID, String? DSRMFormID}) async {
     BeConsent.workSpaceID = workSpaceID;
     BeConsent.consentAppID = consentAppID;
-    BeConsent.DSRMFormID = DSRMFormID;
+    BeConsent.dsrmFormID = DSRMFormID;
     await EasyLocalization.ensureInitialized();
     WidgetsFlutterBinding.ensureInitialized();
     final storage = SecureStorageImpl('beconsent');

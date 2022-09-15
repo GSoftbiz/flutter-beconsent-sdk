@@ -11,7 +11,7 @@ class BeConsentRouter {
               authenticationRepository:
                   Injector.instance.authenticationRepository,
               userSession: Injector.instance.userSession),
-          child: const ConsentScreen(),
+          child: ConsentScreen(),
         )
   };
 }
