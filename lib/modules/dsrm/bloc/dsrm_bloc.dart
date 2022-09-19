@@ -8,6 +8,7 @@ import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_
 import 'package:equatable/equatable.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/submit_consent_body.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/submit_consent_response.dart';
+import 'package:flutter_beconsent_sdk/modules/dsrm/models/create_dsrm_body.dart';
 import 'package:flutter_beconsent_sdk/modules/dsrm/models/drsm_form_response.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -26,7 +27,7 @@ class DSRMBloc extends Bloc<DSRMEvent, DSRMState> {
         _userSession = userSession,
         super(const DSRMState()) {
     on<DSRMEventGetDSRMDetail>(_onGetDSRMForm);
-    //on<ConsentEventSubmitConsent>(_onSubmitConsent);
+    on<DSRMEventSubmitted>(_onSubmit);
   }
 
   final AuthenticationRepository _authenticationRepository;
@@ -49,5 +50,26 @@ class DSRMBloc extends Bloc<DSRMEvent, DSRMState> {
                 status: FormzStatus.submissionSuccess,
               )),
             });
+  }
+
+  void _onSubmit(
+      DSRMEventSubmitted event,
+      Emitter<DSRMState> emit,
+      ) async {
+    emit(state.copyWith(
+      status: FormzStatus.submissionInProgress,
+    ));
+    /*
+    await _authenticationRepository.createDSRM().fold(
+            (left) => emit(
+            state.copyWith(status: FormzStatus.submissionFailure, error: left)),
+            (right) => {
+          emit(state.copyWith(
+            event: event,
+            status: FormzStatus.submissionSuccess,
+          )),
+        });
+
+     */
   }
 }

@@ -2,8 +2,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:country_calling_code_picker/country.dart';
 import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/beconsent.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
-import 'package:flutter_beconsent_sdk/modules/dsrm/bloc/consent_bloc.dart';
+import 'package:flutter_beconsent_sdk/modules/dsrm/bloc/dsrm_bloc.dart';
+import 'package:flutter_beconsent_sdk/modules/dsrm/models/create_dsrm_body.dart';
 import 'package:flutter_beconsent_sdk/modules/dsrm/models/drsm_form_response.dart';
 import 'package:flutter_beconsent_sdk/theme/app_dimension.dart';
 import 'package:flutter_beconsent_sdk/theme/app_theme.dart';
@@ -25,7 +27,15 @@ class DSRMScreen extends StatefulWidget {
 }
 
 class _DSRMScreenState extends State<DSRMScreen> {
-  late BuildContext _context;
+  final TextEditingController _additionalRequestOptionCtr =
+      TextEditingController();
+  final TextEditingController _requestDetailCtr = TextEditingController();
+  final TextEditingController _idFirstNameCtr = TextEditingController();
+  final TextEditingController _idLastNameCtr = TextEditingController();
+  final TextEditingController _idEmailNameCtr = TextEditingController();
+  final TextEditingController _guardianFirstNameCtr = TextEditingController();
+  final TextEditingController _guardianLastNameCtr = TextEditingController();
+  final TextEditingController _guardianEmailNameCtr = TextEditingController();
   DSRMState? _state;
   String? _locale;
   SimpleFontelicoProgressDialog? _dialog;
@@ -50,11 +60,8 @@ class _DSRMScreenState extends State<DSRMScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     if (_locale == null) {
-      _locale = Localizations
-          .localeOf(context)
-          .languageCode;
+      _locale = Localizations.localeOf(context).languageCode;
       LanguageService.language = _locale!;
     }
     _dialog ??=
@@ -109,37 +116,37 @@ class _DSRMScreenState extends State<DSRMScreen> {
       child: (_state?.dsrmForm == null)
           ? const SizedBox()
           : Scaffold(
-        backgroundColor: AppTheme.colorSoftGray,
-        body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  child: const Padding(
-                    padding: EdgeInsets.only(
-                        top: AppDimension.spaceM,
-                        left: AppDimension.spaceL,
-                        right: AppDimension.spaceM),
-                    child: Icon(Icons.cancel),
+              backgroundColor: AppTheme.colorSoftGray,
+              body: SafeArea(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    child: const Padding(
+                      padding: EdgeInsets.only(
+                          top: AppDimension.spaceM,
+                          left: AppDimension.spaceL,
+                          right: AppDimension.spaceM),
+                      child: Icon(Icons.cancel),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                Flexible(
-                    flex: 1,
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: _content(),
-                        ),
-                      ],
-                    )),
-              ],
-            )),
-      ),
+                  Flexible(
+                      flex: 1,
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: _content(),
+                          ),
+                        ],
+                      )),
+                ],
+              )),
+            ),
     );
   }
 
@@ -149,13 +156,11 @@ class _DSRMScreenState extends State<DSRMScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-
         _block1Title(),
         _block2Identity(),
         _block3Rights(),
         (_rightRequest != null) ? _block4RightOptions() : const SizedBox(),
-        _block5Last(),
-
+        (_rightRequest != null) ? _block5Last() : const SizedBox(),
       ],
     );
   }
@@ -180,7 +185,11 @@ class _DSRMScreenState extends State<DSRMScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(const AssetImage("assets/images/logo.png").assetName, package: 'flutter_beconsent_sdk',height: 100,),
+            Image.asset(
+              const AssetImage("assets/images/logo.png").assetName,
+              package: 'flutter_beconsent_sdk',
+              height: 100,
+            ),
             Text(
               LanguageService.get("dsrm_title"),
               style: AppTheme.themeData.textTheme.headline5,
@@ -234,18 +243,21 @@ class _DSRMScreenState extends State<DSRMScreen> {
               height: AppDimension.spaceM,
             ),
             FTextField(
+              controller: _idFirstNameCtr,
               title: LanguageService.get("first_name"),
             ),
             const SizedBox(
               height: AppDimension.spaceS,
             ),
             FTextField(
+              controller: _idLastNameCtr,
               title: LanguageService.get("last_name"),
             ),
             const SizedBox(
               height: AppDimension.spaceS,
             ),
             FTextField(
+              controller: _idEmailNameCtr,
               title: LanguageService.get("email"),
             ),
             const SizedBox(
@@ -260,50 +272,50 @@ class _DSRMScreenState extends State<DSRMScreen> {
             ),
             (_country1 != null)
                 ? Flexible(
-                flex: 0,
-                child: Container(
-                  padding: const EdgeInsets.only(
-                      left: AppDimension.spaceM,
-                      right: AppDimension.spaceM),
-                  height: 49,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: AppTheme.colorTextFieldBorder,
+                    flex: 0,
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                          left: AppDimension.spaceM,
+                          right: AppDimension.spaceM),
+                      height: 49,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: AppTheme.colorTextFieldBorder,
+                          ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
+                      child: GestureDetector(
+                        onTap: () async {
+                          final country = await showCountryPickerSheet(context,
+                              cancelWidget: const SizedBox());
+                          if (country != null) {
+                            setState(() {
+                              _country1 = country;
+                            });
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              _country1!.flag,
+                              package: countryCodePackageName,
+                              height: 20,
+                            ),
+                            const SizedBox(
+                              width: AppDimension.spaceM,
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: Text(
+                                  _country1!.name,
+                                  style: AppTheme.themeData.textTheme.bodyText2,
+                                )),
+                            const Icon(Icons.keyboard_arrow_down_rounded)
+                          ],
+                        ),
                       ),
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(8))),
-                  child: GestureDetector(
-                    onTap: () async {
-                      final country = await showCountryPickerSheet(context,
-                          cancelWidget: const SizedBox());
-                      if (country != null) {
-                        setState(() {
-                          _country1 = country;
-                        });
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          _country1!.flag,
-                          package: countryCodePackageName,
-                          height: 20,
-                        ),
-                        const SizedBox(
-                          width: AppDimension.spaceM,
-                        ),
-                        Expanded(
-                            flex: 1,
-                            child: Text(
-                              _country1!.name,
-                              style: AppTheme.themeData.textTheme.bodyText2,
-                            )),
-                        const Icon(Icons.keyboard_arrow_down_rounded)
-                      ],
-                    ),
-                  ),
-                ))
+                    ))
                 : const SizedBox(),
             const SizedBox(
               height: AppDimension.spaceM,
@@ -322,104 +334,108 @@ class _DSRMScreenState extends State<DSRMScreen> {
                 ),
                 Flexible(
                     child: Text(
-                      LanguageService.get("dsrm_check_box_desc"),
-                      style: AppTheme.themeData.textTheme.bodyText1?.copyWith(color: AppTheme.colorSlate),
-                    ))
+                  LanguageService.get("dsrm_check_box_desc"),
+                  style: AppTheme.themeData.textTheme.bodyText1
+                      ?.copyWith(color: AppTheme.colorSlate),
+                ))
               ],
             ),
             (_guardianChecked == false)
                 ? const SizedBox()
                 : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: AppDimension.spaceM,
-                ),
-                Text(
-                  LanguageService.get("dsrm_guardian_title"),
-                  style: AppTheme.themeData.textTheme.bodyText2,
-                ),
-                const SizedBox(
-                  height: AppDimension.spaceM,
-                ),
-                FTextField(
-                  title: LanguageService.get("first_name"),
-                ),
-                const SizedBox(
-                  height: AppDimension.spaceS,
-                ),
-                FTextField(
-                  title: LanguageService.get("last_name"),
-                ),
-                const SizedBox(
-                  height: AppDimension.spaceS,
-                ),
-                FTextField(
-                  title: LanguageService.get("email"),
-                ),
-                const SizedBox(
-                  height: AppDimension.spaceS,
-                ),
-                Text(
-                  LanguageService.get("country"),
-                  style: AppTheme.themeData.textTheme.bodyText2,
-                ),
-                const SizedBox(
-                  height: AppDimension.spaceS,
-                ),
-                (_country2 != null)
-                    ? Flexible(
-                    flex: 0,
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                          left: AppDimension.spaceM,
-                          right: AppDimension.spaceM),
-                      height: 49,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: AppTheme.colorTextFieldBorder,
-                          ),
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(8))),
-                      child: GestureDetector(
-                        onTap: () async {
-                          final country =
-                          await showCountryPickerSheet(context,
-                              cancelWidget: const SizedBox());
-                          if (country != null) {
-                            setState(() {
-                              _country2 = country;
-                            });
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              _country2!.flag,
-                              package: countryCodePackageName,
-                              height: 20,
-                            ),
-                            const SizedBox(
-                              width: AppDimension.spaceM,
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Text(
-                                  _country2!.name,
-                                  style: AppTheme
-                                      .themeData.textTheme.bodyText2,
-                                )),
-                            const Icon(
-                                Icons.keyboard_arrow_down_rounded)
-                          ],
-                        ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: AppDimension.spaceM,
                       ),
-                    ))
-                    : const SizedBox()
-              ],
-            )
+                      Text(
+                        LanguageService.get("dsrm_guardian_title"),
+                        style: AppTheme.themeData.textTheme.bodyText2,
+                      ),
+                      const SizedBox(
+                        height: AppDimension.spaceM,
+                      ),
+                      FTextField(
+                        controller: _guardianFirstNameCtr,
+                        title: LanguageService.get("first_name"),
+                      ),
+                      const SizedBox(
+                        height: AppDimension.spaceS,
+                      ),
+                      FTextField(
+                        controller: _guardianLastNameCtr,
+                        title: LanguageService.get("last_name"),
+                      ),
+                      const SizedBox(
+                        height: AppDimension.spaceS,
+                      ),
+                      FTextField(
+                        controller: _guardianEmailNameCtr,
+                        title: LanguageService.get("email"),
+                      ),
+                      const SizedBox(
+                        height: AppDimension.spaceS,
+                      ),
+                      Text(
+                        LanguageService.get("country"),
+                        style: AppTheme.themeData.textTheme.bodyText2,
+                      ),
+                      const SizedBox(
+                        height: AppDimension.spaceS,
+                      ),
+                      (_country2 != null)
+                          ? Flexible(
+                              flex: 0,
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    left: AppDimension.spaceM,
+                                    right: AppDimension.spaceM),
+                                height: 49,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1,
+                                      color: AppTheme.colorTextFieldBorder,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8))),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    final country =
+                                        await showCountryPickerSheet(context,
+                                            cancelWidget: const SizedBox());
+                                    if (country != null) {
+                                      setState(() {
+                                        _country2 = country;
+                                      });
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        _country2!.flag,
+                                        package: countryCodePackageName,
+                                        height: 20,
+                                      ),
+                                      const SizedBox(
+                                        width: AppDimension.spaceM,
+                                      ),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            _country2!.name,
+                                            style: AppTheme
+                                                .themeData.textTheme.bodyText2,
+                                          )),
+                                      const Icon(
+                                          Icons.keyboard_arrow_down_rounded)
+                                    ],
+                                  ),
+                                ),
+                              ))
+                          : const SizedBox()
+                    ],
+                  )
           ],
         ));
   }
@@ -501,8 +517,8 @@ class _DSRMScreenState extends State<DSRMScreen> {
                   : const SizedBox(),
               (_rightRequest == rightRequest)
                   ? const SizedBox(
-                width: AppDimension.spaceS,
-              )
+                      width: AppDimension.spaceS,
+                    )
                   : const SizedBox(),
               GestureDetector(
                 child: Text(
@@ -549,25 +565,26 @@ class _DSRMScreenState extends State<DSRMScreen> {
             ),
             (_rightOptionsCheck[_rightRequest!.id]?[-1] == true)
                 ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: AppDimension.spaceS,
-                ),
-                Text(LanguageService.get("other_request"),
-                    style: AppTheme.themeData.textTheme.bodyText2
-                        ?.copyWith(fontWeight: FontWeight.bold)),
-                FTextField(
-                  placeholder:
-                  LanguageService.get("please_provide_detail"),
-                  multiline: true,
-                ),
-                const SizedBox(
-                  height: AppDimension.spaceM,
-                )
-              ],
-            )
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: AppDimension.spaceS,
+                      ),
+                      Text(LanguageService.get("other_request"),
+                          style: AppTheme.themeData.textTheme.bodyText2
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      FTextField(
+                        controller: _additionalRequestOptionCtr,
+                        placeholder:
+                            LanguageService.get("please_provide_detail"),
+                        multiline: true,
+                      ),
+                      const SizedBox(
+                        height: AppDimension.spaceM,
+                      )
+                    ],
+                  )
                 : const SizedBox(),
             const SizedBox(
               height: AppDimension.spaceM,
@@ -582,6 +599,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
             Text(LanguageService.get("provide_detail"),
                 style: AppTheme.themeData.textTheme.headline5),
             FTextField(
+              controller: _requestDetailCtr,
               placeholder: LanguageService.get("please_provide_detail"),
               multiline: true,
             ),
@@ -643,18 +661,18 @@ class _DSRMScreenState extends State<DSRMScreen> {
           ),
           Flexible(
               child: GestureDetector(
-                child: Text(
-                  option.getTitle(context),
-                  style: AppTheme.themeData.textTheme.bodyText2,
-                ),
-                onTap: () {
-                  var isChecked =
-                      _rightOptionsCheck[_rightRequest!.id]?[id] == true;
-                  setState(() {
-                    setOptionChecked(_rightRequest!.id, id, !isChecked);
-                  });
-                },
-              ))
+            child: Text(
+              option.getTitle(context),
+              style: AppTheme.themeData.textTheme.bodyText2,
+            ),
+            onTap: () {
+              var isChecked =
+                  _rightOptionsCheck[_rightRequest!.id]?[id] == true;
+              setState(() {
+                setOptionChecked(_rightRequest!.id, id, !isChecked);
+              });
+            },
+          ))
         ],
       ),
     );
@@ -669,46 +687,75 @@ class _DSRMScreenState extends State<DSRMScreen> {
 
   _block5Last() {
     return Container(
-      color: AppTheme.themeData.primaryColor?.withAlpha(40),
-      padding: const EdgeInsets.only(
-          left: AppDimension.spaceL,
-          right: AppDimension.spaceL,
-          top: AppDimension.spaceL,
-          bottom: AppDimension.spaceL),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          FButton(
-            roundRadius: 30,
-            title: LanguageService.get("submit"),
-            onPressed: () {},
-          ),
-          Column(
-            children: [
-              const SizedBox(
-                height: AppDimension.spaceS,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text("Fee charge : ",
-                style: AppTheme.themeData.textTheme.bodyText2?.copyWith(
-                    color: AppTheme.colorSlate),),
-              Text("0",
-                  style: AppTheme.themeData.textTheme.bodyText2?.copyWith(
-                      color: AppTheme.colorFee))
-            ],
-          )
-        ],
-      ),
-      const SizedBox(
-        height: AppDimension.spaceS,
-      ),
-      Text(
-        LanguageService.get("last"),
-        style: AppTheme.themeData.textTheme.bodyText1,
-      ),
-      ],
-    ));
+        color: AppTheme.themeData.primaryColor?.withAlpha(40),
+        padding: const EdgeInsets.only(
+            left: AppDimension.spaceL,
+            right: AppDimension.spaceL,
+            top: AppDimension.spaceL,
+            bottom: AppDimension.spaceL),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            FButton(
+              roundRadius: 30,
+              title: LanguageService.get("submit"),
+              onPressed: () {
+                _submit();
+              },
+            ),
+            Column(
+              children: [
+                const SizedBox(
+                  height: AppDimension.spaceS,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Fee charge : ",
+                      style: AppTheme.themeData.textTheme.bodyText2
+                          ?.copyWith(color: AppTheme.colorSlate),
+                    ),
+                    Text("0",
+                        style: AppTheme.themeData.textTheme.bodyText2
+                            ?.copyWith(color: AppTheme.colorFee))
+                  ],
+                )
+              ],
+            ),
+            const SizedBox(
+              height: AppDimension.spaceS,
+            ),
+            Text(
+              LanguageService.get("last"),
+              style: AppTheme.themeData.textTheme.bodyText1,
+            ),
+          ],
+        ));
+  }
+
+  void _submit() {
+    List<int> selectedRightRequestOptions = <int>[];
+    _rightOptionsCheck[_rightRequest!.id]?.keys?.forEach((element) {
+      selectedRightRequestOptions.add(element);
+    });
+    CreateDSRMBody body = CreateDSRMBody(
+        additionalRequestOption: _additionalRequestOptionCtr.text,
+        collectionChannel: "",
+        dsrmRequestFormId: _state?.dsrmForm?.dsrmRequestFormId ?? 0,
+        dsrmRequestFormUUID: BeConsent.dsrmFormID ?? "",
+        dsrmRequestFormVersion: _state?.dsrmForm?.version ?? "",
+        identityValidation: IdentityValidation(
+            firstName: _idFirstNameCtr.text, lastName: _idLastNameCtr.text, email: _idEmailNameCtr.text, country: _country1?.name??""),
+        guardianInformation: GuardianInformation(
+            firstName: _guardianFirstNameCtr.text, lastName: _guardianLastNameCtr.text, email: _guardianEmailNameCtr.text, country: _country2?.name??""),
+        hasGuardian: _guardianChecked,
+        requestDetail: _requestDetailCtr.text,
+        rightRequestId: _rightRequest?.id ?? 0,
+        rightRequestUUID: _rightRequest?.uuid ?? "",
+        selectedRightRequestOptions: selectedRightRequestOptions,
+        uid: BeConsent.uuid ?? "");
+    BlocProvider.of<DSRMBloc>(context).add(DSRMEventSubmitted(body));
   }
 }

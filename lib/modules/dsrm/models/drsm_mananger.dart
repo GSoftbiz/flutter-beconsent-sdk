@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_beconsent_sdk/di/injector.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/views/consent_screen.dart';
-import 'package:flutter_beconsent_sdk/modules/dsrm/bloc/consent_bloc.dart';
+import 'package:flutter_beconsent_sdk/modules/dsrm/bloc/dsrm_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/dsrm/views/dsrm_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

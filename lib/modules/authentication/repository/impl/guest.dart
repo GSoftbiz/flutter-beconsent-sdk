@@ -5,12 +5,15 @@ import 'package:flutter_beconsent_sdk/modules/consent/models/get_my_consent_resp
 import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/submit_consent_body.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/submit_consent_response.dart';
+import 'package:flutter_beconsent_sdk/modules/dsrm/models/create_dsrm_body.dart';
+import 'package:flutter_beconsent_sdk/modules/dsrm/models/create_dsrm_response.dart';
 import 'package:flutter_beconsent_sdk/modules/dsrm/models/drsm_form_response.dart';
 import 'package:flutter_beconsent_sdk/network/impl/network_error.dart';
 import 'package:flutter_beconsent_sdk/network/network.dart';
 import 'package:either_dart/either.dart';
 
 import '../../../consent/beconsent.dart';
+
 
 class AuthenticationRepositoryImpl extends Repository
     implements AuthenticationRepository {
@@ -65,6 +68,19 @@ class AuthenticationRepositoryImpl extends Repository
       final response = await apiClient.get(
           '${BeConsent.workSpaceID}/dsrm-request-form-versions/${BeConsent.dsrmFormID}/latest');
       return Right(DSRMFormResponse.fromJson(response.data));
+    } on NetworkError catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(NetworkError.wrap(e));
+    }
+  }
+
+  @override
+  Future<Either<NetworkError, CreateDSRMResponse>> createDSRM(CreateDSRMBody body) async {
+    try {
+      final response = await apiClient.post(
+          '${BeConsent.workSpaceID}/dsrm-request',body:body.toJson());
+      return Right(CreateDSRMResponse.fromJson(response.data));
     } on NetworkError catch (e) {
       return Left(e);
     } catch (e) {

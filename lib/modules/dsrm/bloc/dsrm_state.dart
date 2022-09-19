@@ -1,4 +1,4 @@
-part of 'consent_bloc.dart';
+part of 'dsrm_bloc.dart';
 
 class DSRMState extends Equatable {
   final FormzStatus status;

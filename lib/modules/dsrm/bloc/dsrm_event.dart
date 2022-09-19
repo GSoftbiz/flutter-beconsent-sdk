@@ -1,4 +1,4 @@
-part of 'consent_bloc.dart';
+part of 'dsrm_bloc.dart';
 
 abstract class DSRMEvent extends Equatable {
   const DSRMEvent();
@@ -6,7 +6,15 @@ abstract class DSRMEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DSRMEventGetDSRMDetail extends DSRMEvent {}
+class DSRMEventGetDSRMDetail extends DSRMEvent {
 
-class DSRMEventSubmitted extends DSRMEvent {}
+
+
+}
+
+class DSRMEventSubmitted extends DSRMEvent {
+  final CreateDSRMBody? body;
+  const DSRMEventSubmitted(this.body);
+
+}
 
