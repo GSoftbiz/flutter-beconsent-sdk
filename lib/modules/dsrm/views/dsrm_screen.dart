@@ -78,6 +78,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
     }
     _dialog ??=
         SimpleFontelicoProgressDialog(context: context, barrierDimisable: true);
+
     if (_state?.dsrmForm == null) {
       BlocProvider.of<DSRMBloc>(context).add(DSRMEventGetDSRMDetail());
     }
@@ -198,23 +199,28 @@ class _DSRMScreenState extends State<DSRMScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             (BeConsent.logoVisible)
-                ? Center(child: Stack(
-              children: [
-                (BeConsent.logo != null)
-                    ? Image.asset(
-                  AssetImage(BeConsent.logo!).assetName,
-                  height: 100,
-                )
-                    : Image.asset(
-                  const AssetImage("assets/images/logo.png")
-                      .assetName,
-                  package: 'flutter_beconsent_sdk',
-                  height: 100,
-                )
-              ],
-            ))
+                ? Center(
+                    child: Stack(
+                    children: [
+                      (BeConsent.logo != null)
+                          ? Image.asset(
+                              AssetImage(BeConsent.logo!).assetName,
+                              height: 100,
+                            )
+                          : Image.asset(
+                              const AssetImage("assets/images/logo.png")
+                                  .assetName,
+                              package: 'flutter_beconsent_sdk',
+                              height: 100,
+                            )
+                    ],
+                  ))
                 : const SizedBox(),
-            (BeConsent.logoVisible)?const SizedBox(height: AppDimension.spaceL,):const SizedBox(),
+            (BeConsent.logoVisible)
+                ? const SizedBox(
+                    height: AppDimension.spaceL,
+                  )
+                : const SizedBox(),
             Text(
               LanguageService.get("dsrm_title"),
               style: AppTheme.themeData.textTheme.headline5,
