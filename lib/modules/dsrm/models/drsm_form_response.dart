@@ -116,7 +116,7 @@ class RightRequests {
     required this.options,
     required this.hasFeeCharge,
     required this.enableFeeCharge,
-    this.feeChargeAmount,
+    required this.feeChargeAmount,
     required this.requestType,
   });
   late final int id;
@@ -126,7 +126,7 @@ class RightRequests {
   late final List<Options> options;
   late final bool hasFeeCharge;
   late final bool enableFeeCharge;
-  late final Null feeChargeAmount;
+  late final int? feeChargeAmount;
   late final String requestType;
 
   String getTitle(BuildContext context){
@@ -149,7 +149,7 @@ class RightRequests {
     options = List.from(json['options']).map((e)=>Options.fromJson(e)).toList();
     hasFeeCharge = json['hasFeeCharge'];
     enableFeeCharge = json['enableFeeCharge'];
-    feeChargeAmount = null;
+    feeChargeAmount = json['feeChargeAmount'];
     requestType = json['requestType'];
   }
 

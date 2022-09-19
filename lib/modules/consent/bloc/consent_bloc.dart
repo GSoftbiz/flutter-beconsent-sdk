@@ -107,7 +107,7 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
             uid: BeConsent.uuid,
             action: action,
             language: LanguageService.defaultLanguage,
-            name: BeConsent.name,
+            name: BeConsent.consentUserName,
             collectionChannel: state.consentDetail?.collectionChannel,
             consentUUID: state.consentDetail?.consentUUID,
             consentVersion: state.consentDetail?.version,

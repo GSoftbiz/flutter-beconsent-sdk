@@ -59,6 +59,15 @@ class _DSRMScreenState extends State<DSRMScreen> {
       _country1 = country;
       _country2 = country;
     });
+    if (BeConsent.idFirstName != null) {
+      _idFirstNameCtr.text = BeConsent.idFirstName!;
+    }
+    if (BeConsent.idLastName != null) {
+      _idLastNameCtr.text = BeConsent.idLastName!;
+    }
+    if (BeConsent.idEmail != null) {
+      _idEmailNameCtr.text = BeConsent.idEmail!;
+    }
   }
 
   @override
@@ -188,11 +197,24 @@ class _DSRMScreenState extends State<DSRMScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              const AssetImage("assets/images/logo.png").assetName,
-              package: 'flutter_beconsent_sdk',
-              height: 100,
-            ),
+            (BeConsent.logoVisible)
+                ? Center(child: Stack(
+              children: [
+                (BeConsent.logo != null)
+                    ? Image.asset(
+                  AssetImage(BeConsent.logo!).assetName,
+                  height: 100,
+                )
+                    : Image.asset(
+                  const AssetImage("assets/images/logo.png")
+                      .assetName,
+                  package: 'flutter_beconsent_sdk',
+                  height: 100,
+                )
+              ],
+            ))
+                : const SizedBox(),
+            (BeConsent.logoVisible)?const SizedBox(height: AppDimension.spaceL,):const SizedBox(),
             Text(
               LanguageService.get("dsrm_title"),
               style: AppTheme.themeData.textTheme.headline5,
@@ -712,19 +734,24 @@ class _DSRMScreenState extends State<DSRMScreen> {
                 const SizedBox(
                   height: AppDimension.spaceS,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Fee charge : ",
-                      style: AppTheme.themeData.textTheme.bodyText2
-                          ?.copyWith(color: AppTheme.colorSlate),
-                    ),
-                    Text("0",
-                        style: AppTheme.themeData.textTheme.bodyText2
-                            ?.copyWith(color: AppTheme.colorFee))
-                  ],
-                )
+                (_rightRequest!.hasFeeCharge &&
+                        _rightRequest!.feeChargeAmount != null &&
+                        _rightRequest!.feeChargeAmount! > 0)
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${LanguageService.get("fee_charge")} :",
+                            style: AppTheme.themeData.textTheme.bodyText2
+                                ?.copyWith(color: AppTheme.colorSlate),
+                          ),
+                          Text(
+                              "${_rightRequest!.feeChargeAmount} ${LanguageService.get("baht")}",
+                              style: AppTheme.themeData.textTheme.bodyText2
+                                  ?.copyWith(color: AppTheme.colorFee))
+                        ],
+                      )
+                    : const SizedBox()
               ],
             ),
             const SizedBox(
@@ -739,6 +766,24 @@ class _DSRMScreenState extends State<DSRMScreen> {
   }
 
   void _submit() {
+    if (_userSession.collectionChannel == "") {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.warning,
+        animType: AnimType.bottomSlide,
+        title: LanguageService.get("consent_needed"),
+        dismissOnTouchOutside: true,
+        headerAnimationLoop: false,
+        dismissOnBackKeyPress: true,
+        //width: 260,
+        //autoHide: const Duration(seconds: 2),
+        onDismissCallback: (s) {},
+        btnOkColor: AppTheme.themeData.primaryColor,
+        btnOkOnPress: () {},
+        padding: const EdgeInsets.all(AppDimension.spaceM),
+      ).show();
+      return;
+    }
     List<int> selectedRightRequestOptions = <int>[];
     _rightOptionsCheck[_rightRequest!.id]?.keys?.forEach((element) {
       selectedRightRequestOptions.add(element);
