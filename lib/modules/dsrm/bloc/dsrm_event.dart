@@ -13,7 +13,7 @@ class DSRMEventGetDSRMDetail extends DSRMEvent {
 }
 
 class DSRMEventSubmitted extends DSRMEvent {
-  final CreateDSRMBody? body;
+  final CreateDSRMBody body;
   const DSRMEventSubmitted(this.body);
 
 }

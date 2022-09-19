@@ -2,6 +2,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:country_calling_code_picker/country.dart';
 import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
+import 'package:flutter_beconsent_sdk/core/user_session/user_session.dart';
+import 'package:flutter_beconsent_sdk/di/injector.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/beconsent.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
 import 'package:flutter_beconsent_sdk/modules/dsrm/bloc/dsrm_bloc.dart';
@@ -36,6 +38,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
   final TextEditingController _guardianFirstNameCtr = TextEditingController();
   final TextEditingController _guardianLastNameCtr = TextEditingController();
   final TextEditingController _guardianEmailNameCtr = TextEditingController();
+  final UserSession _userSession = Injector.instance.userSession;
   DSRMState? _state;
   String? _locale;
   SimpleFontelicoProgressDialog? _dialog;
@@ -742,14 +745,20 @@ class _DSRMScreenState extends State<DSRMScreen> {
     });
     CreateDSRMBody body = CreateDSRMBody(
         additionalRequestOption: _additionalRequestOptionCtr.text,
-        collectionChannel: "",
+        collectionChannel: _userSession.collectionChannel,
         dsrmRequestFormId: _state?.dsrmForm?.dsrmRequestFormId ?? 0,
         dsrmRequestFormUUID: BeConsent.dsrmFormID ?? "",
         dsrmRequestFormVersion: _state?.dsrmForm?.version ?? "",
         identityValidation: IdentityValidation(
-            firstName: _idFirstNameCtr.text, lastName: _idLastNameCtr.text, email: _idEmailNameCtr.text, country: _country1?.name??""),
+            firstName: _idFirstNameCtr.text,
+            lastName: _idLastNameCtr.text,
+            email: _idEmailNameCtr.text,
+            country: _country1?.name ?? ""),
         guardianInformation: GuardianInformation(
-            firstName: _guardianFirstNameCtr.text, lastName: _guardianLastNameCtr.text, email: _guardianEmailNameCtr.text, country: _country2?.name??""),
+            firstName: _guardianFirstNameCtr.text,
+            lastName: _guardianLastNameCtr.text,
+            email: _guardianEmailNameCtr.text,
+            country: _country2?.name ?? ""),
         hasGuardian: _guardianChecked,
         requestDetail: _requestDetailCtr.text,
         rightRequestId: _rightRequest?.id ?? 0,

@@ -116,6 +116,7 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
             (left) => emit(state.copyWith(
                 status: FormzStatus.submissionFailure, error: left)),
             (right) => {
+                  _userSession.saveCollectionChannel(right.collectionChannel),
                   emit(state.copyWith(
                       status: FormzStatus.submissionSuccess,
                       consentSubmitted: right,

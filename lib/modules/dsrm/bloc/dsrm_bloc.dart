@@ -59,8 +59,7 @@ class DSRMBloc extends Bloc<DSRMEvent, DSRMState> {
     emit(state.copyWith(
       status: FormzStatus.submissionInProgress,
     ));
-    /*
-    await _authenticationRepository.createDSRM().fold(
+    await _authenticationRepository.createDSRM(event.body).fold(
             (left) => emit(
             state.copyWith(status: FormzStatus.submissionFailure, error: left)),
             (right) => {
@@ -69,7 +68,5 @@ class DSRMBloc extends Bloc<DSRMEvent, DSRMState> {
             status: FormzStatus.submissionSuccess,
           )),
         });
-
-     */
   }
 }

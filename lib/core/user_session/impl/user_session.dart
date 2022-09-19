@@ -7,11 +7,13 @@ class UserSessionImpl implements UserSession {
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
   static const _uuidKey = 'uuid';
+  static const _collectionChannelKey = 'collection_channel_key';
 
   final SecureStorage _secureStorage;
   String? _accessToken;
   String? _refreshToken;
   String? _uuid;
+  String? _collectionChannel;
 
   UserSessionImpl(this._secureStorage);
 
@@ -29,7 +31,7 @@ class UserSessionImpl implements UserSession {
     _accessToken = await _secureStorage.read(_accessTokenKey);
     _refreshToken = await _secureStorage.read(_refreshTokenKey);
     _uuid = await _secureStorage.read(_uuidKey);
-
+    _collectionChannel = await _secureStorage.read(_collectionChannelKey);
     if (_uuid == null) {
       saveUUID(const Uuid().v4());
     }
@@ -69,4 +71,15 @@ class UserSessionImpl implements UserSession {
 
   @override
   String get uuid => _uuid ?? "";
+
+  @override
+  String get collectionChannel => _collectionChannel??"";
+
+  @override
+  Future<void> saveCollectionChannel(String channel) async {
+    try {
+      _collectionChannel = channel;
+      await _secureStorage.write(_collectionChannelKey, channel);
+    } catch (_) {}
+  }
 }
