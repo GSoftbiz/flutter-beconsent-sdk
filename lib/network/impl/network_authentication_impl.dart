@@ -1,11 +1,15 @@
 import 'package:flutter_beconsent_sdk/core/user_session/impl/user_session.dart';
 import 'package:flutter_beconsent_sdk/core/user_session/user_session.dart';
 import 'package:flutter_beconsent_sdk/di/injector.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/beconsent.dart';
 import 'package:flutter_beconsent_sdk/network/network_authentication.dart';
 import 'package:either_dart/either.dart';
 
 class NetworkAuthenticationImpl extends NetworkAuthentication {
   NetworkAuthenticationImpl();
+
+  @override
+  String? get validateToken => BeConsent.validateToken;
 
   @override
   String? get accessToken => Injector.instance.userSession.accessToken;
@@ -32,4 +36,5 @@ class NetworkAuthenticationImpl extends NetworkAuthentication {
      */
     return false;
   }
+
 }

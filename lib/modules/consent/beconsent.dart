@@ -18,6 +18,7 @@ class BeConsent {
   static String? dsrmFormID = "";
   static String? uuid = "";
   static String? consentUserName = "";
+  static String? validateToken;
   static GetConsentDetailResponse? consentDetail;
 
   static String? appNameTh = "Organization";
@@ -37,12 +38,14 @@ class BeConsent {
   static init(
       {String? workSpaceID,
       String? consentAppID,
+        String? validateToken,
       Color? color,
       String? dsrmFormID,
       String? appNameTH,
       String? appNameEN,
       String? logo,
       bool? logoVisible}) async {
+    BeConsent.validateToken = validateToken;
     BeConsent.workSpaceID = workSpaceID;
     BeConsent.consentAppID = consentAppID;
     BeConsent.dsrmFormID = dsrmFormID;

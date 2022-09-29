@@ -51,10 +51,13 @@ class NetworkImpl extends Network {
           options.headers["Accept"] = "application/json";
           options.headers['Accept-Language'] = "en";
 
+          String? validateToken = _authenticationDelegate?.validateToken;
+          if(validateToken!=null){
+            options.headers['Validate-Token'] = validateToken;
+          }
           var token = _authenticationDelegate?.accessToken;
-
           if (token != null && token.isNotEmpty && options.path != "/guest/auth/refresh_token") {
-              debugPrint("token : "+token);
+              //debugPrint("token : "+token);
               options.headers['Authorization'] = "Bearer $token";
           }
 
