@@ -12,7 +12,7 @@ import '../../network/impl/network_authentication_impl.dart';
 import '../../network/impl/network_impl.dart';
 
 class BeConsent {
-  static String baseUrl = "https://wwww.beconsent.tech/api/v1/";
+  static String baseUrl = "https://www.beconsent.tech/api/v1/";
   static String? workSpaceID = "";
   static String? consentAppID = "";
   static String? dsrmFormID = "";
