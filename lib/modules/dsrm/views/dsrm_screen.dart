@@ -187,6 +187,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
   }
 
   _block1Title() {
+
     return Container(
         color: AppTheme.colorSoftGray,
         padding: const EdgeInsets.only(

@@ -37,7 +37,7 @@ class ConsentState extends Equatable {
   List<Object> get props => [status];
 
   bool hasNewVersion() {
-    return int.parse(consented?.consentVersion ?? "0") <
+    return int.parse(consented?.consentVersion?.version ?? "0") <
         int.parse(consentDetail?.version ?? "0");
   }
 }

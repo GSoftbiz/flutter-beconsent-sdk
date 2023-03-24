@@ -1,3 +1,4 @@
+import 'package:flutter_beconsent_sdk/modules/consent/models/consent_version.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
 
 class GetMyConsentResponse {
@@ -9,7 +10,7 @@ class GetMyConsentResponse {
 
   late final List<Purposes> purposes;
   late final String action;
-  late final String consentVersion;
+  late final ConsentVersion consentVersion;
 
   bool isNone() {
     return action.contains("NONE");
@@ -22,7 +23,7 @@ class GetMyConsentResponse {
   GetMyConsentResponse.fromJson(Map<String, dynamic> json) {
     purposes = List.from(json['purposes']).map((e) => Purposes.fromJson(e)).toList();
     action = json['action'];
-    consentVersion = json['consentVersion'];
+    consentVersion = ConsentVersion.fromJson(json['consentVersion']);
   }
 
   Map<String, dynamic> toJson() {
