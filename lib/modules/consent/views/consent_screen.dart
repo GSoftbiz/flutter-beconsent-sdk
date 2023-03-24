@@ -78,6 +78,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
             }
 
             if (state.event is ConsentEventGetMyConsent) {
+              //todo: recheck
+              //todo: CHAGE_TO_NONE
               if (state.hasNewVersion() || widget.forceShow == true) {
                 //show my consent
                 setState(() {
