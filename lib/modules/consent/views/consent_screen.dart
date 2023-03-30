@@ -404,7 +404,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
     );
     fToast?.showToast(
       child: toast,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.TOP,
       toastDuration: const Duration(seconds: 2),
     );
   }
