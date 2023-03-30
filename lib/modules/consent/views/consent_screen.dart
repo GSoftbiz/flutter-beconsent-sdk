@@ -239,20 +239,20 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 (BeConsent.logo != null)
                     ? Image.asset(
                   AssetImage(BeConsent.logo!).assetName,
-                  height: 100,
+                  height: 80,
                 )
                     : Image.asset(
                   const AssetImage("assets/images/logo.png")
                       .assetName,
                   package: 'flutter_beconsent_sdk',
-                  height: 100,
+                  height: 80,
                 )
               ],
             ))
             : const SizedBox(),
         (BeConsent.logoVisible)
             ? const SizedBox(
-          height: AppDimension.spaceL,
+          height: AppDimension.spaceM,
         )
             : const SizedBox(),
         Text(
