@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
+import 'package:flutter_beconsent_sdk/modules/consent/beconsent.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
 import 'package:flutter_beconsent_sdk/theme/app_dimension.dart';
@@ -231,6 +232,29 @@ class _ConsentScreenState extends State<ConsentScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        (BeConsent.logoVisible)
+            ? Center(
+            child: Stack(
+              children: [
+                (BeConsent.logo != null)
+                    ? Image.asset(
+                  AssetImage(BeConsent.logo!).assetName,
+                  height: 100,
+                )
+                    : Image.asset(
+                  const AssetImage("assets/images/logo.png")
+                      .assetName,
+                  package: 'flutter_beconsent_sdk',
+                  height: 100,
+                )
+              ],
+            ))
+            : const SizedBox(),
+        (BeConsent.logoVisible)
+            ? const SizedBox(
+          height: AppDimension.spaceL,
+        )
+            : const SizedBox(),
         Text(
           _consentDetail!.getTitle(_context),
           style: AppTheme.themeData.textTheme.headline5,
