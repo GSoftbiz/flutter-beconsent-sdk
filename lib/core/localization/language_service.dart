@@ -7,7 +7,7 @@ class LanguageService {
       'accept_all': 'Accept All',
       'decline_additions': 'Decline Additions',
       'save_settings': 'Save Settings',
-      'success': 'Success',
+      'success': 'Save Success',
       'first_name': 'First name',
       'last_name': 'Last name',
       'email': 'Email',
@@ -43,12 +43,13 @@ class LanguageService {
       'consent_needed': 'Sorry, please submit your consent before continue',
       'baht': 'Baht',
       'fee_charge': 'Fee charge',
+      'policy_footer': 'You can learn system\'s Privacy Policy details here',
     },
     'th': {
       'accept_all': 'ยินยอมทั้งหมด',
       'decline_additions': 'ปฏิเสธค่าที่ไม่จำเป็น',
       'save_settings': 'บันทึกค่าที่เลือก',
-      'success': 'สำเร็จ',
+      'success': 'บันทึกสำเร็จ',
       'first_name': 'ชื่อ',
       'last_name': 'นามสกุล',
       'email': 'อีเมล',
@@ -84,11 +85,16 @@ class LanguageService {
       'consent_needed': 'ขออภัย กรุณาส่งคำยินยอมของท่าน ก่อนทำรายการนี้',
       'baht': 'บาท',
       'fee_charge': 'ค่าธรรมเนียม',
+      'policy_footer': 'ท่านสามารถดูรายละเอียดการจัดการข้อมูลส่วนบุคคลของระบบในนโยบายความเป็นส่วนตัวที่',
     }
   };
 
   static set language(String lang) {
     defaultLanguage = lang;
+  }
+
+  static String? get policy_footer {
+    return _localizedValues[defaultLanguage]?['policy_footer'];
   }
 
   static String? get accept_all {

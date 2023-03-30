@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/bloc/consent_bloc.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/get_consent_detail_response.dart';
@@ -8,8 +9,10 @@ import 'package:flutter_beconsent_sdk/utils/custom_views/f_button.dart';
 import 'package:flutter_beconsent_sdk/utils/helper/alert_dialog_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formz/formz.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ConsentScreen extends StatefulWidget {
   static const String route = '/consent';
@@ -27,6 +30,14 @@ class _ConsentScreenState extends State<ConsentScreen> {
   bool _allChecked = true;
   Map<int, bool> _purposeChecked = {};
   String? _locale;
+  FToast? fToast;
+
+  @override
+  void initState() {
+    super.initState();
+    fToast ??= FToast();
+    fToast?.init(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,26 +71,30 @@ class _ConsentScreenState extends State<ConsentScreen> {
             }
 
             if (state.event is ConsentEventSubmitConsent) {
+              _toastSuccess();
+              Navigator.pop(context);
+              /*
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.success,
                 animType: AnimType.bottomSlide,
-                title: LanguageService.success,
+                //title: LanguageService.success,
                 dismissOnTouchOutside: false,
                 headerAnimationLoop: false,
                 dismissOnBackKeyPress: false,
                 width: 260,
+                isDense: false,
                 autoHide: const Duration(seconds: 2),
-                onDismissCallback: (s){
+                onDismissCallback: (s) {
                   Navigator.pop(context);
                 },
                 padding: const EdgeInsets.only(bottom: AppDimension.spaceM),
               ).show();
+
+               */
             }
 
             if (state.event is ConsentEventGetMyConsent) {
-              //todo: recheck
-              //todo: CHAGE_TO_NONE
               if (state.hasNewVersion() || widget.forceShow == true) {
                 //show my consent
                 setState(() {
@@ -160,13 +175,15 @@ class _ConsentScreenState extends State<ConsentScreen> {
                         left: AppDimension.spaceL,
                         right: AppDimension.spaceL,
                         top: AppDimension.spaceM,
-                        bottom: AppDimension.spaceM),
+                        bottom: AppDimension.spaceL),
                     child: Row(
                       children: [
                         Expanded(
                             flex: 1,
                             child: FButton(
                               title: LanguageService.decline_additions ?? "",
+                              backgroundColor: Colors.grey.shade400,
+                              textStyle: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),
                               roundRadius: 30,
                               onPressed: () {
                                 setState(() {
@@ -192,6 +209,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                             flex: 1,
                             child: FButton(
                               title: LanguageService.save_settings ?? "",
+                              textStyle: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),
                               roundRadius: 30,
                               onPressed: () {
                                 BlocProvider.of<ConsentBloc>(context).add(
@@ -252,9 +270,38 @@ class _ConsentScreenState extends State<ConsentScreen> {
         _line(),
         Column(
           children: _purposeWidgets(),
-        )
+        ),
+        _consentDetail?.showPrivacyPolicyLink == true
+            ? Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: AppDimension.spaceM),
+                child: RichText(
+                    text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: "${LanguageService.policy_footer} ",
+                        style: const TextStyle(color: Colors.black)),
+                    TextSpan(
+                        text: _consentDetail?.linkPolicy,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () async => {
+                                if (_consentDetail?.linkPolicy != null)
+                                  {
+                                    _launchUrl(Uri.parse('${_consentDetail?.linkPolicy}'))
+                                  }
+                              },
+                        style: const TextStyle(color: Colors.blue)),
+                  ],
+                )))
+            : const SizedBox()
       ],
     );
+  }
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   _line() {
@@ -327,5 +374,38 @@ class _ConsentScreenState extends State<ConsentScreen> {
         return;
       }
     });
+  }
+
+
+  _toastSuccess() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.black,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.check_circle,
+            color: Colors.white,
+          ),
+          const SizedBox(
+            width: AppDimension.spaceS,
+          ),
+          Text(
+            "${LanguageService.success}",
+            style: AppTheme.themeData.textTheme.headline5
+                ?.copyWith(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+    fToast?.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: const Duration(seconds: 2),
+    );
   }
 }
