@@ -8,7 +8,7 @@ class GetMyConsentResponse {
     required this.consentVersion,
   });
 
-  late final List<Purposes> purposes;
+  late final List<Purposes>? purposes;
   late final String action;
   late final ConsentVersion consentVersion;
 
@@ -21,7 +21,7 @@ class GetMyConsentResponse {
   }
 
   GetMyConsentResponse.fromJson(Map<String, dynamic> json) {
-    purposes = List.from(json['purposes']).map((e) => Purposes.fromJson(e)).toList();
+    purposes =json['purposes']!=null?List.from(json['purposes']).map((e)=>Purposes.fromJson(e)).toList():null;
     action = json['action'];
     consentVersion = ConsentVersion.fromJson(json['consentVersion']);
   }
@@ -30,7 +30,7 @@ class GetMyConsentResponse {
     final _data = <String, dynamic>{};
     _data['action'] = action;
     _data['consentVersion'] = consentVersion;
-    _data['purposes'] = purposes.map((e) => e.toJson()).toList();
+    _data['purposes'] = purposes?.map((e) => e.toJson()).toList();
     return _data;
   }
 }
