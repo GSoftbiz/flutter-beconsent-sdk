@@ -13,6 +13,8 @@ import 'package:formz/formz.dart';
 import 'package:flutter_beconsent_sdk/modules/authentication/repository/guest.dart';
 import 'package:flutter_beconsent_sdk/network/impl/network_error.dart';
 
+import '../../dsrm/models/create_dsrm_body.dart';
+
 part 'consent_event.dart';
 
 part 'consent_state.dart';
@@ -111,6 +113,8 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
             collectionChannel: state.consentDetail?.collectionChannel,
             consentUUID: state.consentDetail?.consentUUID,
             consentVersion: state.consentDetail?.version,
+            hasGuardian: event.guardianChecked,
+            guardianInformation: event.guardianInformation,
             purposeUUIDs: purposeUUIDs))
         .fold(
             (left) => emit(state.copyWith(

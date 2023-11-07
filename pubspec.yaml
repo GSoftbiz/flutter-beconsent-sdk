@@ -34,13 +34,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
   equatable: ^2.0.3
-  firebase_core: ^1.19.1
   flutter_svg: ^1.1.1+1
   json_annotation: 4.5.0
   pretty_dio_logger: ^1.2.0-beta-1
   uuid: ^3.0.6
-  google_fonts: ^3.0.1
-  firebase_crashlytics: ^2.8.4
   shared_preferences: ^2.0.15
   formz: ^0.4.1
   flutter_bloc: ^8.0.0
@@ -61,8 +58,6 @@ dependencies:
   flutter_shake_animated: ^0.0.5
   flutter_local_notifications: ^9.6.1
   device_info: ^2.0.3
-  firebase_auth: ^3.7.0
-  firebase_messaging: ^13.0.0
   simple_fontellico_progress_dialog: ^0.2.1
   awesome_dialog: ^3.0.1
   url_launcher: ^6.1.10

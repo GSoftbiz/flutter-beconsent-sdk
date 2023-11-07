@@ -15,6 +15,9 @@ import 'package:formz/formz.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../utils/custom_views/f_textfield.dart';
+import '../../dsrm/models/create_dsrm_body.dart';
+
 class ConsentScreen extends StatefulWidget {
   static const String route = '/consent';
   bool? forceShow;
@@ -32,6 +35,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
   Map<int, bool> _purposeChecked = {};
   String? _locale;
   FToast? fToast;
+
+  final TextEditingController _guardianFirstNameCtr = TextEditingController();
+  final TextEditingController _guardianLastNameCtr = TextEditingController();
+  final TextEditingController _guardianEmailCtr = TextEditingController();
+  final TextEditingController _guardianPhoneNumberCtr = TextEditingController();
+  bool _guardianChecked = false;
 
   @override
   void initState() {
@@ -200,7 +209,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
                                   }
                                 });
                                 BlocProvider.of<ConsentBloc>(context).add(
-                                    ConsentEventSubmitConsent(_purposeChecked));
+                                    ConsentEventSubmitConsent(_purposeChecked,_guardianChecked,GuardianInformation(
+                                        firstName: _guardianFirstNameCtr.text,
+                                        lastName: _guardianLastNameCtr.text,
+                                        email: _guardianEmailCtr.text,
+                                        country: "",
+                                        phoneNumber: _guardianPhoneNumberCtr.text)));
                               },
                             )),
                         const SizedBox(
@@ -213,8 +227,24 @@ class _ConsentScreenState extends State<ConsentScreen> {
                               textStyle: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),
                               roundRadius: 30,
                               onPressed: () {
+                                if(_guardianChecked){
+                                  if(_guardianFirstNameCtr.text.isEmpty){
+                                    showAlertDialog(context, null,LanguageService.get("validate_name"));
+                                    return;
+                                  }
+                                  if(_guardianEmailCtr.text.isEmpty){
+                                    showAlertDialog(context, null,LanguageService.get("validate_email"));
+                                    return;
+                                  }
+                                }
+
                                 BlocProvider.of<ConsentBloc>(context).add(
-                                    ConsentEventSubmitConsent(_purposeChecked));
+                                    ConsentEventSubmitConsent(_purposeChecked,_guardianChecked,GuardianInformation(
+                                        firstName: _guardianFirstNameCtr.text,
+                                        lastName: _guardianLastNameCtr.text,
+                                        email: _guardianEmailCtr.text,
+                                        country: "",
+                                        phoneNumber: _guardianPhoneNumberCtr.text)));
                               },
                             ))
                       ],
@@ -267,6 +297,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
           height: AppDimension.spaceM,
         ),
         _line(),
+
+
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -291,6 +323,74 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 })
           ],
         ),
+
+        _line(),
+        const SizedBox(height: AppDimension.spaceM,),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Checkbox(
+              value: _guardianChecked,
+              onChanged: (c) {
+                setState(() {
+                  _guardianChecked = c!;
+                });
+              },
+            ),
+            Flexible(
+                child: Text(
+                  LanguageService.get("dsrm_check_box_desc"),
+                  style: AppTheme.themeData.textTheme.bodyText1
+                      ?.copyWith(color: AppTheme.colorSlate),
+                ))
+          ],
+        ),
+        (_guardianChecked == false)
+            ? const SizedBox()
+            : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: AppDimension.spaceM,
+            ),
+            Text(
+              LanguageService.get("dsrm_guardian_title"),
+              style: AppTheme.themeData.textTheme.bodyText2,
+            ),
+            const SizedBox(
+              height: AppDimension.spaceM,
+            ),
+            FTextField(
+              controller: _guardianFirstNameCtr,
+              title: LanguageService.get("first_name"),
+            ),
+            const SizedBox(
+              height: AppDimension.spaceS,
+            ),
+            FTextField(
+              controller: _guardianLastNameCtr,
+              title: LanguageService.get("last_name"),
+            ),
+            const SizedBox(
+              height: AppDimension.spaceS,
+            ),
+            FTextField(
+              controller: _guardianEmailCtr,
+              title: LanguageService.get("email"),
+            ),
+            const SizedBox(
+              height: AppDimension.spaceS,
+            ),
+            FTextField(
+              controller: _guardianPhoneNumberCtr,
+              title: LanguageService.get("phone_number"),
+            ),
+
+          ],
+        ),
+        const SizedBox(height: AppDimension.spaceM,),
         _line(),
         Column(
           children: _purposeWidgets(),

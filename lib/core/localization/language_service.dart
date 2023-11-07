@@ -11,6 +11,7 @@ class LanguageService {
       'first_name': 'First name',
       'last_name': 'Last name',
       'email': 'Email',
+      'phone_number': 'Phone number',
       'country': 'Country',
       'dsrm_title': 'Data Subject Right Access',
       'dsrm_desc_1_1':
@@ -44,6 +45,8 @@ class LanguageService {
       'baht': 'Baht',
       'fee_charge': 'Fee charge',
       'policy_footer': 'You can learn system\'s Privacy Policy details here',
+      'validate_name': 'Please enter first name',
+      'validate_email': 'Please enter email',
     },
     'th': {
       'accept_all': 'ยินยอมทั้งหมด',
@@ -53,6 +56,7 @@ class LanguageService {
       'first_name': 'ชื่อ',
       'last_name': 'นามสกุล',
       'email': 'อีเมล',
+      'phone_number': 'เบอร์โทรศัพท์',
       'country': 'ประเทศ',
       'dsrm_title': 'คำร้องขอใช้สิทธิของเจ้าของข้อมูล',
       'dsrm_desc_1_1':
@@ -86,6 +90,8 @@ class LanguageService {
       'baht': 'บาท',
       'fee_charge': 'ค่าธรรมเนียม',
       'policy_footer': 'ท่านสามารถดูรายละเอียดการจัดการข้อมูลส่วนบุคคลของระบบในนโยบายความเป็นส่วนตัวที่',
+      'validate_name': 'กรุณาระบุชื่อ',
+      'validate_email': 'กรุณาระบุอีเมล',
     }
   };
 

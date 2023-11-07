@@ -1,6 +1,6 @@
 // Styling inspire from https://github.com/flutter/gallery/blob/master/lib/themes/gallery_theme_data.dart
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 class AppTheme {
   static const FontWeight extraLight = FontWeight.w200;

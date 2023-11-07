@@ -7,8 +7,7 @@ import 'package:flutter_beconsent_sdk/network/impl/network_authentication_impl.d
 import 'package:flutter_beconsent_sdk/network/network_authentication.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_beconsent_sdk/app.dart';
 import 'package:flutter_beconsent_sdk/configs/app_configs.dart';
@@ -20,15 +19,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 void main() {}
 
 Future<void> handleError(Object error, StackTrace? stack) async {
-  await FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  //await FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
 }
 
 void run(Config config) async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
-    await Firebase.initializeApp();
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    //await Firebase.initializeApp();
+    //await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     final storage = SecureStorageImpl('beConsent');
     Injector.instance.setup(
       apiClient: NetworkImpl(

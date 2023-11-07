@@ -69,17 +69,20 @@ class GuardianInformation {
     required this.email,
     required this.firstName,
     required this.lastName,
+    required this.phoneNumber,
   });
   late final String country;
   late final String email;
   late final String firstName;
   late final String lastName;
+  late final String phoneNumber;
 
   GuardianInformation.fromJson(Map<String, dynamic> json){
     country = json['country'];
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
+    phoneNumber = json['phoneNumber'];
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +91,8 @@ class GuardianInformation {
     _data['email'] = email;
     _data['firstName'] = firstName;
     _data['lastName'] = lastName;
+    _data['phoneNumber'] = phoneNumber;
+
     return _data;
   }
 }
@@ -98,17 +103,21 @@ class IdentityValidation {
     required this.email,
     required this.firstName,
     required this.lastName,
+    required this.phoneNumber,
   });
   late final String country;
   late final String email;
   late final String firstName;
   late final String lastName;
+  late final String phoneNumber;
+
 
   IdentityValidation.fromJson(Map<String, dynamic> json){
     country = json['country'];
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
+    phoneNumber = json['phoneNumber'];
   }
 
   Map<String, dynamic> toJson() {
@@ -117,6 +126,7 @@ class IdentityValidation {
     _data['email'] = email;
     _data['firstName'] = firstName;
     _data['lastName'] = lastName;
+    _data['phoneNumber'] = phoneNumber;
     return _data;
   }
 }

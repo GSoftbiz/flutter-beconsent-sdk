@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_beconsent_sdk/core/repository/repository.dart';
 import 'package:flutter_beconsent_sdk/modules/authentication/repository/guest.dart';
 import 'package:flutter_beconsent_sdk/modules/consent/models/get_my_consent_body.dart';
@@ -42,7 +43,8 @@ class AuthenticationRepositoryImpl extends Repository
       return Right(SubmitConsentResponse.fromJson(response.data));
     } on NetworkError catch (e) {
       return Left(e);
-    } catch (e) {
+    } catch (e,stack) {
+      debugPrintStack(stackTrace: stack);
       return Left(NetworkError.wrap(e));
     }
   }

@@ -34,10 +34,13 @@ class _DSRMScreenState extends State<DSRMScreen> {
   final TextEditingController _requestDetailCtr = TextEditingController();
   final TextEditingController _idFirstNameCtr = TextEditingController();
   final TextEditingController _idLastNameCtr = TextEditingController();
-  final TextEditingController _idEmailNameCtr = TextEditingController();
+  final TextEditingController _idEmailCtr = TextEditingController();
+  final TextEditingController _idPhoneNumberCtr = TextEditingController();
+
   final TextEditingController _guardianFirstNameCtr = TextEditingController();
   final TextEditingController _guardianLastNameCtr = TextEditingController();
-  final TextEditingController _guardianEmailNameCtr = TextEditingController();
+  final TextEditingController _guardianEmailCtr = TextEditingController();
+  final TextEditingController _guardianPhoneNumberCtr = TextEditingController();
   final UserSession _userSession = Injector.instance.userSession;
   DSRMState? _state;
   String? _locale;
@@ -66,7 +69,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
       _idLastNameCtr.text = BeConsent.idLastName!;
     }
     if (BeConsent.idEmail != null) {
-      _idEmailNameCtr.text = BeConsent.idEmail!;
+      _idEmailCtr.text = BeConsent.idEmail!;
     }
   }
 
@@ -187,7 +190,6 @@ class _DSRMScreenState extends State<DSRMScreen> {
   }
 
   _block1Title() {
-
     return Container(
         color: AppTheme.colorSoftGray,
         padding: const EdgeInsets.only(
@@ -289,13 +291,17 @@ class _DSRMScreenState extends State<DSRMScreen> {
               height: AppDimension.spaceS,
             ),
             FTextField(
-              controller: _idEmailNameCtr,
+              controller: _idEmailCtr,
               title: LanguageService.get("email"),
             ),
             const SizedBox(
               height: AppDimension.spaceS,
             ),
-            Text(
+            FTextField(
+              controller: _idPhoneNumberCtr,
+              title: LanguageService.get("phone_number"),
+            ),
+            /*Text(
               LanguageService.get("country"),
               style: AppTheme.themeData.textTheme.bodyText2,
             ),
@@ -351,7 +357,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
                 : const SizedBox(),
             const SizedBox(
               height: AppDimension.spaceM,
-            ),
+            ),*/
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -403,12 +409,17 @@ class _DSRMScreenState extends State<DSRMScreen> {
                         height: AppDimension.spaceS,
                       ),
                       FTextField(
-                        controller: _guardianEmailNameCtr,
+                        controller: _guardianEmailCtr,
                         title: LanguageService.get("email"),
                       ),
                       const SizedBox(
                         height: AppDimension.spaceS,
                       ),
+                      FTextField(
+                        controller: _guardianPhoneNumberCtr,
+                        title: LanguageService.get("phone_number"),
+                      ),
+                      /*
                       Text(
                         LanguageService.get("country"),
                         style: AppTheme.themeData.textTheme.bodyText2,
@@ -465,7 +476,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
                                   ),
                                 ),
                               ))
-                          : const SizedBox()
+                          : const SizedBox()*/
                     ],
                   )
           ],
@@ -791,6 +802,16 @@ class _DSRMScreenState extends State<DSRMScreen> {
       ).show();
       return;
     }
+    if(_guardianChecked){
+      if(_guardianFirstNameCtr.text.isEmpty){
+        showAlertDialog(context, null,LanguageService.get("validate_name"));
+        return;
+      }
+      if(_guardianEmailCtr.text.isEmpty){
+        showAlertDialog(context, null,LanguageService.get("validate_email"));
+        return;
+      }
+    }
     List<int> selectedRightRequestOptions = <int>[];
     _rightOptionsCheck[_rightRequest!.id]?.keys?.forEach((element) {
       selectedRightRequestOptions.add(element);
@@ -804,13 +825,15 @@ class _DSRMScreenState extends State<DSRMScreen> {
         identityValidation: IdentityValidation(
             firstName: _idFirstNameCtr.text,
             lastName: _idLastNameCtr.text,
-            email: _idEmailNameCtr.text,
-            country: _country1?.name ?? ""),
+            email: _idEmailCtr.text,
+            country: "",
+            phoneNumber: _idPhoneNumberCtr.text),
         guardianInformation: GuardianInformation(
             firstName: _guardianFirstNameCtr.text,
             lastName: _guardianLastNameCtr.text,
-            email: _guardianEmailNameCtr.text,
-            country: _country2?.name ?? ""),
+            email: _guardianEmailCtr.text,
+            country: "",
+            phoneNumber: _guardianPhoneNumberCtr.text),
         hasGuardian: _guardianChecked,
         requestDetail: _requestDetailCtr.text,
         rightRequestId: _rightRequest?.id ?? 0,
