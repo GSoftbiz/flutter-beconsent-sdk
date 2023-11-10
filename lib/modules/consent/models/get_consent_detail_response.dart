@@ -47,7 +47,7 @@ class GetConsentDetailResponse {
   late final String logo;
   late final bool showPrivacyPolicyLink;
   late final Null customApiDescription;
-  late final String latestVersion;
+  late final String? latestVersion;
   late final String version;
   late final Template template;
   late final String collectionChannel;

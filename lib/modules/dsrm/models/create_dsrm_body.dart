@@ -69,20 +69,20 @@ class GuardianInformation {
     required this.email,
     required this.firstName,
     required this.lastName,
-    required this.phoneNumber,
+    required this.telephone,
   });
   late final String country;
   late final String email;
   late final String firstName;
   late final String lastName;
-  late final String phoneNumber;
+  late final String telephone;
 
   GuardianInformation.fromJson(Map<String, dynamic> json){
     country = json['country'];
     email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
-    phoneNumber = json['phoneNumber'];
+    telephone = json['telephone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,7 +91,7 @@ class GuardianInformation {
     _data['email'] = email;
     _data['firstName'] = firstName;
     _data['lastName'] = lastName;
-    _data['phoneNumber'] = phoneNumber;
+    _data['telephone'] = telephone;
 
     return _data;
   }

@@ -11,7 +11,8 @@ class SubmitConsentBody {
       List<String>? purposeUUIDs,
       String? uid,
         bool? hasGuardian,
-      GuardianInformation? guardianInformation}) {
+      GuardianInformation? guardianInformation,
+        String? source, }) {
     _action = action;
     _collectionChannel = collectionChannel;
     _consentUUID = consentUUID;
@@ -22,6 +23,7 @@ class SubmitConsentBody {
     _uid = uid;
     _hasGuardian = hasGuardian;
     _guardianInformation = guardianInformation;
+    _source = source;
 
   }
 
@@ -47,6 +49,7 @@ class SubmitConsentBody {
   String? _uid;
   GuardianInformation? _guardianInformation;
   bool? _hasGuardian;
+  String? _source;
 
   SubmitConsentBody copyWith({
     String? action,
@@ -101,6 +104,8 @@ class SubmitConsentBody {
         map['guardianInformation'] = _guardianInformation!.toJson();
       }
     }
+    map['source'] = _source;
+
 
 
 

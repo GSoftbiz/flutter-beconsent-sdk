@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/custom_views/f_textfield.dart';
 import '../../dsrm/models/create_dsrm_body.dart';
+import '../models/get_my_consent_response.dart';
 
 class ConsentScreen extends StatefulWidget {
   static const String route = '/consent';
@@ -31,10 +32,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
   late BuildContext _context;
   SimpleFontelicoProgressDialog? _dialog;
   GetConsentDetailResponse? _consentDetail;
+  GetMyConsentResponse? _consented;
   bool _allChecked = true;
   Map<int, bool> _purposeChecked = {};
   String? _locale;
   FToast? fToast;
+
 
   final TextEditingController _guardianFirstNameCtr = TextEditingController();
   final TextEditingController _guardianLastNameCtr = TextEditingController();
@@ -109,6 +112,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
                 //show my consent
                 setState(() {
                   _consentDetail = state.consentDetail;
+                  _consented = state.consented;
+                  _guardianChecked = _consented?.hasGuardian == true;
+                  _guardianFirstNameCtr.text = _consented?.guardianInformation?.firstName??"";
+                  _guardianLastNameCtr.text = _consented?.guardianInformation?.lastName??"";
+                  _guardianEmailCtr.text = _consented?.guardianInformation?.email??"";
+                  _guardianPhoneNumberCtr.text = _consented?.guardianInformation?.telephone??"";
                   _consentDetail?.purposes?.forEach((element) {
                     _purposeChecked[element.id] = false;
                   });
@@ -214,7 +223,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                                         lastName: _guardianLastNameCtr.text,
                                         email: _guardianEmailCtr.text,
                                         country: "",
-                                        phoneNumber: _guardianPhoneNumberCtr.text)));
+                                        telephone: _guardianPhoneNumberCtr.text)));
                               },
                             )),
                         const SizedBox(
@@ -244,7 +253,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
                                         lastName: _guardianLastNameCtr.text,
                                         email: _guardianEmailCtr.text,
                                         country: "",
-                                        phoneNumber: _guardianPhoneNumberCtr.text)));
+                                        telephone: _guardianPhoneNumberCtr.text)));
                               },
                             ))
                       ],

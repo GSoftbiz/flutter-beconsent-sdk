@@ -29,7 +29,8 @@ class AuthenticationRepositoryImpl extends Repository
       return Right(GetConsentDetailResponse.fromJson(response.data));
     } on NetworkError catch (e) {
       return Left(e);
-    } catch (e) {
+    } catch (e,stack) {
+      debugPrintStack(stackTrace: stack);
       return Left(NetworkError.wrap(e));
     }
   }
@@ -72,7 +73,8 @@ class AuthenticationRepositoryImpl extends Repository
       return Right(DSRMFormResponse.fromJson(response.data));
     } on NetworkError catch (e) {
       return Left(e);
-    } catch (e) {
+    } catch (e,stack) {
+      debugPrintStack(stackTrace: stack);
       return Left(NetworkError.wrap(e));
     }
   }
@@ -85,7 +87,8 @@ class AuthenticationRepositoryImpl extends Repository
       return Right(CreateDSRMResponse.fromJson(response.data));
     } on NetworkError catch (e) {
       return Left(e);
-    } catch (e) {
+    } catch (e,stack) {
+      debugPrintStack(stackTrace: stack);
       return Left(NetworkError.wrap(e));
     }
   }

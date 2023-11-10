@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:either_dart/either.dart';
 import 'package:flutter_beconsent_sdk/core/localization/language_service.dart';
 import 'package:flutter_beconsent_sdk/core/user_session/user_session.dart';
@@ -115,7 +117,8 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
             consentVersion: state.consentDetail?.version,
             hasGuardian: event.guardianChecked,
             guardianInformation: event.guardianInformation,
-            purposeUUIDs: purposeUUIDs))
+            purposeUUIDs: purposeUUIDs,
+            source: Platform.isAndroid?"android":"ios"))
         .fold(
             (left) => emit(state.copyWith(
                 status: FormzStatus.submissionFailure, error: left)),

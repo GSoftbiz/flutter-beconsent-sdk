@@ -833,7 +833,7 @@ class _DSRMScreenState extends State<DSRMScreen> {
             lastName: _guardianLastNameCtr.text,
             email: _guardianEmailCtr.text,
             country: "",
-            phoneNumber: _guardianPhoneNumberCtr.text),
+            telephone: _guardianPhoneNumberCtr.text),
         hasGuardian: _guardianChecked,
         requestDetail: _requestDetailCtr.text,
         rightRequestId: _rightRequest?.id ?? 0,

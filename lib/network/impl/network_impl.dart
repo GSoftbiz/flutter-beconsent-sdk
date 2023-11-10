@@ -137,9 +137,9 @@ class NetworkImpl extends Network {
         final message = data is String ? data : data["message"] ?? "";
         final ee = NetworkError(
           _url(path),
-          message: message,
+          message: message.toString(),
           statusCode: e.response?.statusCode ?? 400,
-          internalStatusCode: data is String ? data : data["code"],
+          internalStatusCode: data is String ? data : data["code"]!=null?data["code"]:"",
         );
         throw ee;
       } else {

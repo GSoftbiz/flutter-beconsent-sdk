@@ -6,12 +6,13 @@ class SubmitConsentResponse {
     required this.purposes,
     required this.action,
     required this.consentVersion,
-    required this.collectionChannel
+    required this.collectionChannel,
   });
   late final List<Purposes> purposes;
   late final String action;
   late final Version consentVersion;
   late final String collectionChannel;
+
 
   bool isNone() {
     return action.contains("NONE");
