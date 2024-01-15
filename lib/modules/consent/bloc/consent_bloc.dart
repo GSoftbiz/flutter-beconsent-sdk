@@ -118,7 +118,7 @@ class ConsentBloc extends Bloc<ConsentEvent, ConsentState> {
             hasGuardian: event.guardianChecked,
             guardianInformation: event.guardianInformation,
             purposeUUIDs: purposeUUIDs,
-            source: Platform.isAndroid?"android":"ios"))
+            source: BeConsent.source))
         .fold(
             (left) => emit(state.copyWith(
                 status: FormzStatus.submissionFailure, error: left)),

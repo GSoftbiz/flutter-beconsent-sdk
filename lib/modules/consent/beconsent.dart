@@ -28,6 +28,7 @@ class BeConsent {
   static String? idFirstName;
   static String? idLastName;
   static String? idEmail;
+  static String? source;
 
   static setIdentity({String? firstName, lastName, email}) {
     BeConsent.idFirstName = firstName;
@@ -44,7 +45,7 @@ class BeConsent {
       String? appNameTH,
       String? appNameEN,
       String? logo,
-      bool? logoVisible}) async {
+      bool? logoVisible,String? source}) async {
     BeConsent.validateToken = validateToken;
     BeConsent.workSpaceID = workSpaceID;
     BeConsent.consentAppID = consentAppID;
@@ -53,6 +54,7 @@ class BeConsent {
     BeConsent.appNameEn = appNameEN;
     BeConsent.logo = logo;
     BeConsent.logoVisible = logoVisible ?? true;
+    BeConsent.source = source;
     if (color != null) {
       AppTheme.setPrimaryColor(color);
     }
